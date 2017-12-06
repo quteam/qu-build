@@ -6,6 +6,7 @@ import {
 } from 'fs';
 import {
   join,
+  resolve,
 } from 'path';
 import autoprefixer from 'autoprefixer';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
@@ -86,8 +87,11 @@ export default function getWebpackCommonConfig(args) {
 
     resolve: {
       // css-loader modules is true, less-loader can't found image, so add "./"
-      modules: ['./', 'node_modules', join(__dirname, '../node_modules')],
-      extensions: ['.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx', '.js', '.jsx', '.json'],
+      modules: ['./', 'node_modules', resolve(__dirname, '../node_modules')],
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
+    resolveLoader: {
+      modules: ['node_modules', resolve(__dirname, '../node_modules')],
     },
 
     entry: pkg.entry,
@@ -96,65 +100,65 @@ export default function getWebpackCommonConfig(args) {
 
     module: {
       rules: [{
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'font/[hash:8].[ext]',
-          limit: 8192,
-          minetype: 'application/font-woff',
+          test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'font/[hash:8].[ext]',
+            limit: 8192,
+            minetype: 'application/font-woff',
+          },
         },
-      },
-      {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'font/[hash:8].[ext]',
-          limit: 8192,
-          minetype: 'application/font-woff',
+        {
+          test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'font/[hash:8].[ext]',
+            limit: 8192,
+            minetype: 'application/font-woff',
+          },
         },
-      },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'font/[hash:8].[ext]',
-          limit: 8192,
-          minetype: 'application/octet-stream',
+        {
+          test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'font/[hash:8].[ext]',
+            limit: 8192,
+            minetype: 'application/octet-stream',
+          },
         },
-      },
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'font/[hash:8].[ext]',
-          limit: 8192,
-          minetype: 'application/vnd.ms-fontobject',
+        {
+          test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'font/[hash:8].[ext]',
+            limit: 8192,
+            minetype: 'application/vnd.ms-fontobject',
+          },
         },
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'img/[hash:8].[ext]',
-          limit: 8192,
-          minetype: 'image/svg+xml',
+        {
+          test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'img/[hash:8].[ext]',
+            limit: 8192,
+            minetype: 'image/svg+xml',
+          },
         },
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
-        loader: 'url-loader',
-        options: {
-          name: 'img/[hash:8].[ext]',
-          limit: 8192,
+        {
+          test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
+          loader: 'url-loader',
+          options: {
+            name: 'img/[hash:8].[ext]',
+            limit: 8192,
+          },
         },
-      },
-      {
-        test: /\.html?$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]',
+        {
+          test: /\.html?$/,
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+          },
         },
-      },
       ],
     },
 
