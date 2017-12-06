@@ -1,0 +1,23 @@
+{
+  "presets": [
+    "stage-0", [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "Android >= 4",
+            "Chrome >= 35",
+            "Firefox >= 31",
+            "iOS >= 9",
+            "Opera >= 12",
+            "Safari >= 9",
+            "IE >= 9"
+          ]
+        },
+        // "modules": false,
+        "useBuiltIns": true
+      }
+    ]
+  ],
+  "comments": false
+}

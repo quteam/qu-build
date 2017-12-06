@@ -1,0 +1,22 @@
+{
+  "extends": "eslint-config-airbnb-base",
+  "parser": "babel-eslint",
+  "env": {
+    "es6": true,
+    "browser": true,
+    "mocha": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": [0],
+    "space-before-function-paren": [2, "never"],
+    "max-len": [2, 120, 2],
+    "global-require": [0],
+    "linebreak-style": [0],
+    "import/no-dynamic-require": [0]
+  }
+}

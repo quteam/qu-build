@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}
+
+
+var program = require('commander');
+var chalk = require('chalk');
+var build = require('../lib/build');
+
+var _build = _interopRequireDefault(build).default;
+
+program
+  .version(require('../package').version, '-v, --version')
+  .option('-o, --output-path <path>', 'output path')
+  .option('-w, --watch [delay]', 'watch file changes and rebuild')
+  .option('-d, --dev', 'start develop server')
+  .option('-p, --port [port]', 'develop server port, default is 8080')
+  .option('--hash', 'build with hash and output map.json')
+  .option('--publicPath <publicPath>', 'publicPath for webpack')
+  .option('--devtool <devtool>', 'sourcemap generate method, default is null')
+  .option('--config <path>', 'custom config path, default is webpack.config.js')
+  .option('--no-compress', 'build without compress')
+  .option('--json', 'running webpack with --json, ex. result.json')
+  .option('--verbose', 'run with more logging messages.')
+  .parse(process.argv);
+
+program.cwd = process.cwd();
+
+if (program.watch) {
+  _build(program);
+} else {
+  _build(program, function (err) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    process.exit(0);
+  });
+}
