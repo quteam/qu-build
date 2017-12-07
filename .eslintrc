@@ -13,6 +13,7 @@
   },
   "rules": {
     "no-console": [0],
+    "array-callback-return": 0,
     "space-before-function-paren": [2, "never"],
     "max-len": [2, 120, 2],
     "global-require": [0],

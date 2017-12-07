@@ -8,6 +8,7 @@ import {
 import webpack, {
   ProgressPlugin,
 } from 'webpack';
+import rimraf from 'rimraf';
 import chalk from 'chalk';
 import mergeCustomConfig from './merge-custom-config';
 import getWebpackCommonConfig from './get-webpack-common-config';
@@ -50,7 +51,6 @@ function getWebpackConfig(args, cache) {
         compress: {
           warnings: false,
         },
-        sourceMap: true,
       }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
@@ -162,6 +162,11 @@ export default function build(args, callback) {
       callback(err);
     }
   }
+
+  // Remove output path
+  webpackConfig.map((config) => {
+    rimraf.sync(config.output.path);
+  });
 
   // Run compiler.
   const compiler = webpack(webpackConfig);

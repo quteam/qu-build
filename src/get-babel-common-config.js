@@ -21,13 +21,14 @@ export default function babel() {
             ],
           },
           modules: false,
-          useBuiltIns: true,
+          // useBuiltIns: true,
         },
       ],
     ],
     plugins: [
-      require.resolve('babel-plugin-add-module-exports'),
-      require.resolve('babel-plugin-transform-decorators-legacy'),
+      // require.resolve('babel-plugin-add-module-exports'),
+      // require.resolve('babel-plugin-transform-decorators-legacy'),
     ],
+    comments: false,
   };
 }

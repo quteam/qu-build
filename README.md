@@ -1,12 +1,12 @@
-# 前端自动化工具
+# Build tools for FE
 
-## 安装
+## Install
 
 ```bash
 npm install qu-build -g
 ```
 
-## 使用
+## Usage
 
 ```bash
 Usage: qu-build [options]
@@ -24,4 +24,22 @@ Usage: qu-build [options]
 --json                     running webpack with --json, ex. result.json
 --verbose                  run with more logging messages.
 -h, --help                 output usage information
+```
+
+## Config
+
+webpack.config.js
+
+```javascript
+// get webpack
+var webpack = require('qu-build/lib/webpack');
+
+module.exports = function(webpackConfig) {
+  webpackConfig.plugins.push(
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify('true')
+    });
+  );
+  return webpackConfig;
+};
 ```
