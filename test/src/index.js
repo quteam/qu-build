@@ -1,6 +1,6 @@
 import './index.less';
 
-let {
+const {
   a,
   b,
   c,
@@ -8,7 +8,6 @@ let {
   a: 1,
   b: 2,
   c: 3,
-}
+};
 
-console.log(Date.now())
-console.log(a, b);
+console.log(a, b, c);

@@ -82,8 +82,7 @@ export default function getWebpackCommonConfig(args) {
       filename: jsFileName,
       chunkFilename: jsFileName,
     },
-
-    devtool: args.devtool,
+    devtool: args.dev ? 'source-map' : args.devtool,
 
     resolve: {
       // css-loader modules is true, less-loader can't found image, so add "./"
@@ -93,11 +92,8 @@ export default function getWebpackCommonConfig(args) {
     resolveLoader: {
       modules: ['node_modules', resolve(__dirname, '../node_modules')],
     },
-
     entry: pkg.entry,
-
     node,
-
     module: {
       rules: [{
           test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,

@@ -21,7 +21,7 @@ function injectPostcssOptions(webpackConfig, args) {
     return _opts;
   }
 
-  const canCompress = args.compress && !args.watch;
+  const canCompress = args.compress && !args.dev && !args.watch;
   const postcssOptions = webpackConfig.postcss;
   delete webpackConfig.postcss; // eslint-disable-line
 
@@ -46,78 +46,78 @@ function injectPostcssOptions(webpackConfig, args) {
       return /\.css$/.test(filePath) && !/\.module\.css$/.test(filePath);
     },
     use: extractCSS([{
-      loader: 'css-loader',
-      options: {
-        sourceMap: true,
-        minimize: canCompress,
+        loader: 'css-loader',
+        options: {
+          sourceMap: true,
+          minimize: canCompress,
+        },
       },
-    },
-    {
-      loader: 'postcss-loader',
-      options: postcssOptions,
-    },
+      {
+        loader: 'postcss-loader',
+        options: postcssOptions,
+      },
     ]),
   }, {
     test: /\.module\.css$/,
     use: extractCSS([{
-      loader: 'css-loader',
-      options: {
-        sourceMap: true,
-        modules: true,
-        minimize: canCompress,
-        localIdentName: '[local]___[hash:base62:5]',
+        loader: 'css-loader',
+        options: {
+          sourceMap: true,
+          modules: true,
+          minimize: canCompress,
+          localIdentName: '[local]___[hash:base62:5]',
+        },
       },
-    },
-    {
-      loader: 'postcss-loader',
-      options: postcssOptions,
-    },
+      {
+        loader: 'postcss-loader',
+        options: postcssOptions,
+      },
     ]),
   }, {
     test(filePath) {
       return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
     },
     use: extractCSS([{
-      loader: 'css-loader',
-      options: {
-        sourceMap: true,
-        minimize: canCompress,
+        loader: 'css-loader',
+        options: {
+          sourceMap: true,
+          minimize: canCompress,
+        },
       },
-    },
-    {
-      loader: 'postcss-loader',
-      options: postcssOptions,
-    },
-    {
-      loader: 'less-loader',
-      options: {
-        sourceMap: true,
-        // modifyVars: theme,
+      {
+        loader: 'postcss-loader',
+        options: postcssOptions,
       },
-    },
+      {
+        loader: 'less-loader',
+        options: {
+          sourceMap: true,
+          // modifyVars: theme,
+        },
+      },
     ]),
   }, {
     test: /\.module\.less$/,
     use: extractCSS([{
-      loader: 'css-loader',
-      options: {
-        sourceMap: true,
-        modules: true,
-        minimize: canCompress,
-        localIdentName: '[local]___[hash:base62:5]',
+        loader: 'css-loader',
+        options: {
+          sourceMap: true,
+          modules: true,
+          minimize: canCompress,
+          localIdentName: '[local]___[hash:base62:5]',
+        },
       },
-    },
-    {
-      loader: 'postcss-loader',
-      options: postcssOptions,
-    },
-    {
-      loader: 'less-loader',
-      options: {
-        sourceMap: true,
-        // modifyVars: theme,
+      {
+        loader: 'postcss-loader',
+        options: postcssOptions,
       },
-    },
+      {
+        loader: 'less-loader',
+        options: {
+          sourceMap: true,
+          // modifyVars: theme,
+        },
+      },
     ]),
   });
 }
@@ -134,16 +134,16 @@ function injectBabelOptions(webpackConfig) {
   }, {
     test: /\.tsx?$/,
     use: [{
-      loader: 'babel-loader',
-      options: babelOptions,
-    },
-    {
-      loader: 'ts-loader',
-      options: {
-        transpileOnly: true,
-        compilerOptions: tsQuery,
+        loader: 'babel-loader',
+        options: babelOptions,
       },
-    },
+      {
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+          compilerOptions: tsQuery,
+        },
+      },
     ],
   });
 }

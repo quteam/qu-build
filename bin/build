@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
-function _interopRequireDefault(obj) {
+function interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {
-    default: obj
+    default: obj,
   };
 }
 
 
-var program = require('commander');
-var chalk = require('chalk');
-var build = require('../lib/build');
+const program = require('commander');
+// const chalk = require('chalk');
+const build = require('../lib/build');
 
-var _build = _interopRequireDefault(build).default;
+const _build = interopRequireDefault(build).default;
 
 program
   .version(require('../package').version, '-v, --version')
@@ -33,9 +33,9 @@ program.cwd = process.cwd();
 if (program.watch) {
   _build(program);
 } else {
-  _build(program, function (err) {
+  _build(program, (err) => {
     if (err) {
-      console.error(err);
+      // console.error(err);
       process.exit(1);
     }
     process.exit(0);

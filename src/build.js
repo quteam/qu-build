@@ -39,8 +39,8 @@ function getWebpackConfig(args, cache) {
   }
 
   // Config if no --no-compress.
-  // Watch mode should not use UglifyJsPlugin
-  if (args.compress && !args.watch) {
+  // Watch mode and Develop mode should not use UglifyJsPlugin
+  if (args.compress && !args.dev && !args.watch) {
     webpackConfig.plugins = [...webpackConfig.plugins,
       new webpack.optimize.UglifyJsPlugin({
         parallel: true,
@@ -50,6 +50,7 @@ function getWebpackConfig(args, cache) {
         compress: {
           warnings: false,
         },
+        sourceMap: true,
       }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),

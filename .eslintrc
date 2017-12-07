@@ -17,6 +17,8 @@
     "max-len": [2, 120, 2],
     "global-require": [0],
     "linebreak-style": [0],
+    "no-underscore-dangle": [0],
+    "indent": [0],
     "import/no-dynamic-require": [0]
   }
 }
