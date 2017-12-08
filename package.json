@@ -1,7 +1,7 @@
 {
   "name": "qu-build",
-  "version": "1.1.5",
-  "description": "build tools for FE",
+  "version": "1.1.6",
+  "description": "Build tools for FE",
   "bin": {
     "qu-build": "./bin/build"
   },
@@ -51,6 +51,7 @@
     "less-plugin-npm-import": "^2.1.0",
     "map-json-webpack-plugin": "^1.2.0",
     "mockjs": "^1.0.1-beta3",
+    "ncp": "^2.0.0",
     "node-walkdir": "^0.1.1",
     "postcss": "^6.0.14",
     "postcss-loader": "^2.0.9",

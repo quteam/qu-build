@@ -163,11 +163,6 @@ export default function build(args, callback) {
     }
   }
 
-  // Remove output path
-  webpackConfig.map((config) => {
-    rimraf.sync(config.output.path);
-  });
-
   // Run compiler.
   const compiler = webpack(webpackConfig);
 
@@ -187,6 +182,10 @@ export default function build(args, callback) {
   } else if (args.dev) {
     devServer(compiler, args);
   } else {
+    // Remove output path
+    webpackConfig.map((config) => {
+      rimraf.sync(config.output.path);
+    });
     compiler.run(doneHandler);
   }
 }
