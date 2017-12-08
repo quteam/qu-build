@@ -1,9 +1,11 @@
 export default function ts() {
   return {
-    target: 'es6',
+    target: 'ESNEXT',
     jsx: 'preserve',
     moduleResolution: 'node',
-    declaration: false,
+    declaration: true,
+    experimentalDecorators: true,
     sourceMap: true,
+    strict: true,
   };
 }

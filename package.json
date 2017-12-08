@@ -1,6 +1,6 @@
 {
   "name": "qu-build",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "build tools for FE",
   "bin": {
     "qu-build": "./bin/build"
@@ -19,6 +19,12 @@
     "type": "git",
     "url": "git@github.com:quteam/qu-build.git"
   },
+  "keywords": [
+    "webpack",
+    "typescript",
+    "es",
+    "babel"
+  ],
   "author": "haovei <haovei@gmail.com>",
   "license": "MIT",
   "dependencies": {

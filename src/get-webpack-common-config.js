@@ -148,13 +148,13 @@ export default function getWebpackCommonConfig(args) {
             limit: 8192,
           },
         },
-        {
-          test: /\.html?$/,
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-          },
-        },
+        // {
+        //   test: /\.html?$/,
+        //   loader: 'file-loader',
+        //   options: {
+        //     name: '[name].[ext]',
+        //   },
+        // },
       ],
     },
 
@@ -181,7 +181,7 @@ export default function getWebpackCommonConfig(args) {
       }),
       new HtmlWebpackPlugin({
         // filename: 'index.html',
-        template: 'src/page.tpl', // 模板路径
+        template: 'src/page.html', // 模板路径
         inject: true, // js插入位置
       }),
     ],

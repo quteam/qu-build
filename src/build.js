@@ -27,6 +27,7 @@ function checkConfig(webpackConfig) {
 
 function getWebpackConfig(args, cache) {
   let webpackConfig = getWebpackCommonConfig(args);
+  injectLoaderOptions(webpackConfig, args);
 
   webpackConfig.plugins = webpackConfig.plugins || [];
 
@@ -97,7 +98,6 @@ export default function build(args, callback) {
 
   let fileOutputPath;
   webpackConfig.forEach((config) => {
-    injectLoaderOptions(config, args);
     fileOutputPath = config.output.path;
 
     // add hot-reload related code to entry chunks
