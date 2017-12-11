@@ -159,7 +159,7 @@ export default function build(args, callback) {
         stream.write(`${chalk.magenta(msg)} (${chalk.magenta(addInfo)})`);
         stream.clearLine(1);
       } else if (percentage === 1) {
-        console.log(chalk.green('\nwebpack: bundle build is now finished.'));
+        console.log(chalk.green('webpack: bundle build is now finished.'));
       }
     }));
   });

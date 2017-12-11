@@ -5,21 +5,30 @@ const path = require('path');
 const chalk = require('chalk');
 const ncp = require('ncp').ncp;
 
-program
-  .usage('<template-name> [project-name]')
-  .option('<template> [project]', 'template: [vue, pages]')
-  .parse(process.argv);
-
 function handleTemplate(_tplName, _prjName) {
   ncp(path.resolve(__dirname, `../template/${_tplName}`), path.resolve(process.cwd(), _prjName));
+  console.log(chalk.green('\n  Create project success.\n'));
 }
 
-const tplName = program.args[0];
-const prjName = program.args[1] || 'example';
+program
+  .usage('<template-name> <project-name>')
+  .option('<template> <project>', 'template: [vue, pages]')
+  .action(function (template, project) {
+    if (template && template !== '[object Object]') {
+      program.template = template;
+    }
+    if (project && project !== '[object Object]') {
+      program.project = project;
+    }
+  })
+  .parse(process.argv);
 
-if (!tplName) {
-  console.error(chalk.red('\n  No template name.'));
+if (!program.template) {
+  console.error(chalk.red('\n  No template name.\n'));
+  process.exit();
+} else if (!program.project) {
+  console.error(chalk.red('\n  No project name.\n'));
   process.exit();
 } else {
-  handleTemplate(tplName, prjName);
+  handleTemplate(program.template, program.project);
 }

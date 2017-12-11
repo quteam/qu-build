@@ -10,8 +10,8 @@ function interopRequireDefault(obj) {
 const program = require('commander');
 // const chalk = require('chalk');
 const build = require('../lib/build');
-
 const _build = interopRequireDefault(build).default;
+let isCMD = false;
 
 program
   .version(require('../package').version, '-v, --version')
@@ -27,24 +27,29 @@ program
   .option('--no-compress', 'build without compress')
   .option('--json', 'running webpack with --json, ex. result.json')
   .option('--verbose', 'run with more logging messages.')
-  .command('init', 'generate a new project from a template')
-  .parse(process.argv);
+
+program
+  .command('init', 'generate a new project from a template.')
+  .action(function (cmd) {
+    isCMD = true;
+    // if (!/^help|init$/g.test(cmd)) {
+    //   process.exit();
+    // }
+  })
+
+program.parse(process.argv);
+
+if (isCMD) {
+  return;
+}
 
 program.cwd = process.cwd();
-
-switch (program.args[0]) {
-  case 'init':
-    process.exit();
-    break;
-  default:
-}
 
 if (program.watch) {
   _build(program);
 } else {
   _build(program, (err) => {
     if (err) {
-      // console.error(err);
       process.exit(1);
     }
     process.exit(0);
