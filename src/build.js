@@ -93,7 +93,7 @@ function getWebpackConfig(args, cache) {
 }
 
 export default function build(args, callback) {
-  const commonName = args.hash ? 'common-[chunkhash:8].js' : 'common.js';
+  const commonName = args.hash ? 'js/common-[chunkhash:8].js' : 'js/common.js';
   // Get config.
   let webpackConfig = getWebpackConfig(args, {});
   webpackConfig = Array.isArray(webpackConfig) ? webpackConfig : [webpackConfig];
@@ -117,6 +117,7 @@ export default function build(args, callback) {
           collapseWhitespace: true,
           minifyJS: true,
         };
+        conf.filename = `html/${pathname}.html`;
       } else {
         conf.hash = args.dev;
       }

@@ -15,6 +15,7 @@ function injectPostcssOptions(webpackConfig, args) {
     if (!args.dev) {
       return ExtractTextPlugin.extract({
         use: _opts,
+        publicPath: '../',
       });
     }
     _opts.unshift('style-loader');

@@ -30,8 +30,8 @@ export default function getWebpackCommonConfig(args) {
     };
   }
 
-  const jsFileName = args.hash ? '[name]-[chunkhash:8].js' : '[name].js';
-  const cssFileName = args.hash ? '[name]-[contenthash:8].css' : '[name].css';
+  const jsFileName = args.hash ? 'js/[name]-[chunkhash:8].js' : 'js/[name].js';
+  const cssFileName = args.hash ? 'css/[name]-[contenthash:8].css' : 'css/[name].css';
   // const commonName = args.hash ? 'common-[chunkhash:8].js' : 'common.js';
 
   const silent = args.silent === true;
