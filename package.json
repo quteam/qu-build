@@ -1,6 +1,6 @@
 {
   "name": "qu-build",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Build tools for FE",
   "bin": {
     "qu-build": "./bin/build",
@@ -8,7 +8,8 @@
   },
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "template"
   ],
   "scripts": {
     "build": "rimraf lib && babel src --out-dir lib",
