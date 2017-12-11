@@ -7,7 +7,7 @@ const ncp = require('ncp').ncp;
 
 program
   .usage('<template-name> [project-name]')
-  .option('<template> [project]', 'template: [vue]')
+  .option('<template> [project]', 'template: [vue, pages]')
   .parse(process.argv);
 
 function handleTemplate(_tplName, _prjName) {

@@ -10,6 +10,7 @@ import webpack, {
 } from 'webpack';
 import rimraf from 'rimraf';
 import chalk from 'chalk';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import mergeCustomConfig from './merge-custom-config';
 import getWebpackCommonConfig from './get-webpack-common-config';
 import injectLoaderOptions from './inject-loader-options';
@@ -92,9 +93,48 @@ function getWebpackConfig(args, cache) {
 }
 
 export default function build(args, callback) {
+  const commonName = args.hash ? 'common-[chunkhash:8].js' : 'common.js';
   // Get config.
   let webpackConfig = getWebpackConfig(args, {});
   webpackConfig = Array.isArray(webpackConfig) ? webpackConfig : [webpackConfig];
+
+  // Multi html pages 多入口多页面
+  webpackConfig.forEach((config) => {
+    const entryArr = Object.keys(config.entry);
+
+    entryArr.map((pathname) => {
+      // 配置生成的html文件，定义路径等
+      const conf = {
+        filename: `${pathname}.html`,
+        template: `${config.entry[pathname]}/page.html`,
+        inject: true,
+        chunksSortMode: 'dependency',
+      };
+
+      if (!args.dev) {
+        conf.minify = {
+          removeComments: true,
+          collapseWhitespace: true,
+          minifyJS: true,
+        };
+      } else {
+        conf.hash = args.dev;
+      }
+
+      if (entryArr.length > 1) {
+        conf.chunks = ['common', pathname];
+      }
+
+      config.plugins.push(new HtmlWebpackPlugin(conf));
+    });
+
+    if (entryArr.length > 1) {
+      config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+        name: 'common',
+        filename: commonName,
+      }));
+    }
+  });
 
   let fileOutputPath;
   webpackConfig.forEach((config) => {
@@ -109,7 +149,6 @@ export default function build(args, callback) {
       });
     }
   });
-
 
   webpackConfig.forEach((config) => {
     config.plugins.push(new ProgressPlugin((percentage, msg, addInfo) => {

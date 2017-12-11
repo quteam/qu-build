@@ -165,7 +165,7 @@ export default function getWebpackCommonConfig(args) {
       // }),
       new ExtractTextPlugin({
         filename: cssFileName,
-        disable: args.dev,
+        disable: !!args.dev,
         allChunks: true,
       }),
       new CaseSensitivePathsPlugin(),
@@ -179,11 +179,11 @@ export default function getWebpackCommonConfig(args) {
           console.error(`${severity} : ${error.name}`);
         },
       }),
-      new HtmlWebpackPlugin({
-        // filename: 'index.html',
-        template: 'src/page.html', // 模板路径
-        inject: true, // js插入位置
-      }),
+      // new HtmlWebpackPlugin({
+      //   // filename: 'index.html',
+      //   template: 'src/page.html', // 模板路径
+      //   inject: true, // js插入位置
+      // }),
     ],
   };
 
