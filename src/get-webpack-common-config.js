@@ -148,13 +148,10 @@ export default function getWebpackCommonConfig(args) {
             limit: 8192,
           },
         },
-        // {
-        //   test: /\.html?$/,
-        //   loader: 'file-loader',
-        //   options: {
-        //     name: '[name].[ext]',
-        //   },
-        // },
+        {
+          test: /\.module\.(html|htm|txt|tpl)$/,
+          loader: 'raw-loader',
+        },
       ],
     },
 
