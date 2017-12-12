@@ -64,7 +64,7 @@ function mock(_opts) {
     });
   });
 
-  return function(req, res, next) {
+  return function handle(req, res, next) {
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
@@ -95,9 +95,15 @@ function mock(_opts) {
     let data = (routes[url] || 0).data;
     if (data) {
       if (typeof data === 'function') {
-        data = data(req, Mock, Random);
+        data = data(req, res, Mock);
       }
-      res.json(Mock.mock(data));
+      const _mockData = Mock.mock(data);
+      if (req.query.callback) {
+        res.end(`${req.query.callback}(${JSON.stringify(_mockData)})`);
+      } else {
+        res.json(_mockData);
+      }
+
     } else {
       next();
     }
