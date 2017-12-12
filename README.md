@@ -46,6 +46,26 @@ qu-build init vue project-name
 qu-build init pages project-name
 ```
 
+## Mock
+
+Use mockjs, mock storage directory `./src/api`.
+
+```javascript
+/**
+ * @url /order/addOrderComment.do
+ * 
+ */
+
+module.exports = function (req) {
+  return {
+    success: Math.random() < 0.5 ? false : true,
+    msg: '@word',
+    code: Math.random() < 0.5 ? -200 : 0,
+  };
+}
+```
+
+
 ## Config
 
 webpack.config.js
