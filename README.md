@@ -1,5 +1,7 @@
 # Build tools for FE
 
+Universal front-end automation tools
+
 ## Install
 
 ```bash
@@ -48,7 +50,7 @@ qu-build init pages project-name
 
 ## Mock
 
-Use mockjs, mock storage directory `./src/api`.
+Use mockjs, mock storage directory `./src/api`, support `.js`,`.json`
 
 ```javascript
 /**
