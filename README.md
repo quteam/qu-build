@@ -19,6 +19,7 @@ Options:
     -d, --dev                  start develop server
     -p, --port [port]          develop server port, default is 8080
     -b, --build                build this project
+    -t, --test                 test this project, use jest
     --hash                     build with hash and output map.json
     --publicPath <publicPath>  publicPath for webpack
     --devtool <devtool>        sourcemap generate method, default is null
@@ -31,8 +32,18 @@ Options:
 
   Commands:
 
-    init        generate a new project from a template
+    init        generate a new project from a template, templates: [vue, pages]
 
+```
+
+## Template Create
+
+```bash
+# vue template project
+qu-build init vue project-name
+
+# multi page template project
+qu-build init pages project-name
 ```
 
 ## Config

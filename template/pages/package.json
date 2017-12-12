@@ -4,7 +4,9 @@
   "description": "example",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "qu-build -d",
+    "build": "qu-build -b",
+    "test": "qu-build -t"
   },
   "author": "",
   "license": "ISC",
