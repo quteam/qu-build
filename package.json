@@ -1,6 +1,6 @@
 {
   "name": "qu-build",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "description": "Build tools for FE",
   "bin": {
     "qu-build": "./bin/build",
@@ -39,6 +39,7 @@
     "chalk": "^2.3.0",
     "commander": "^2.12.2",
     "connect-history-api-fallback": "^1.5.0",
+    "copy-webpack-plugin": "^4.2.3",
     "css-loader": "^0.28.7",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.2",

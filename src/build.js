@@ -11,6 +11,7 @@ import webpack, {
 import rimraf from 'rimraf';
 import chalk from 'chalk';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import mergeCustomConfig from './merge-custom-config';
 import getWebpackCommonConfig from './get-webpack-common-config';
 import injectLoaderOptions from './inject-loader-options';
@@ -111,15 +112,15 @@ export default function build(args, callback) {
         chunksSortMode: 'dependency',
       };
 
-      if (!args.dev) {
+      if (args.dev) {
+        conf.hash = true;
+      } else {
         conf.minify = {
           removeComments: true,
           collapseWhitespace: true,
           minifyJS: true,
         };
         conf.filename = `html/${pathname}.html`;
-      } else {
-        conf.hash = args.dev;
       }
 
       if (entryArr.length > 1) {
@@ -137,17 +138,29 @@ export default function build(args, callback) {
     }
   });
 
+  // 差异配置
   let fileOutputPath;
   webpackConfig.forEach((config) => {
     fileOutputPath = config.output.path;
 
-    // add hot-reload related code to entry chunks
     if (args.dev) {
+      // add hot-reload related code to entry chunks
       config.plugins.push(new webpack.HotModuleReplacementPlugin());
       const devClientPath = resolve(process.mainModule.filename, '../../lib/dev-client');
       Object.keys(config.entry).forEach((name) => {
         config.entry[name] = [devClientPath].concat(config.entry[name]);
       });
+    } else {
+      // Remove output path
+      rimraf.sync(fileOutputPath);
+
+      // 复制公共文件
+      config.plugins.push(new CopyWebpackPlugin([{
+        from: resolve(args.cwd, './public'),
+        ignore: ['.*'],
+      }], {
+        copyUnmodified: true,
+      }));
     }
   });
 
@@ -159,13 +172,13 @@ export default function build(args, callback) {
         stream.write(`${chalk.magenta(msg)} (${chalk.magenta(addInfo)})`);
         stream.clearLine(1);
       } else if (percentage === 1) {
-        console.log(chalk.green('webpack: bundle build is now finished.'));
+        // console.log(chalk.green('webpack: bundle build is now finished.'));
       }
     }));
   });
 
-
   function doneHandler(err, stats) {
+    console.log(err, stats);
     if (args.json) {
       const filename = typeof args.json === 'boolean' ? 'build-bundle.json' : args.json;
       const jsonPath = join(fileOutputPath, filename);
@@ -222,10 +235,6 @@ export default function build(args, callback) {
   } else if (args.dev) {
     devServer(compiler, args);
   } else {
-    // Remove output path
-    webpackConfig.map((config) => {
-      rimraf.sync(config.output.path);
-    });
     compiler.run(doneHandler);
   }
 }
