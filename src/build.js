@@ -4,6 +4,7 @@ import {
 } from 'path';
 import {
   writeFileSync,
+  existsSync,
 } from 'fs';
 import webpack, {
   ProgressPlugin,
@@ -94,7 +95,7 @@ function getWebpackConfig(args, cache) {
 }
 
 export default function build(args, callback) {
-  const commonName = args.hash ? 'js/common-[chunkhash:8].js' : 'js/common.js';
+  const commonName = args.hash ? 'js/common-[chunkhash:5].js' : 'js/common.js';
   // Get config.
   let webpackConfig = getWebpackConfig(args, {});
   webpackConfig = Array.isArray(webpackConfig) ? webpackConfig : [webpackConfig];
@@ -155,12 +156,15 @@ export default function build(args, callback) {
       rimraf.sync(fileOutputPath);
 
       // 复制公共文件
-      config.plugins.push(new CopyWebpackPlugin([{
-        from: resolve(args.cwd, './public'),
-        ignore: ['.*'],
-      }], {
-        copyUnmodified: true,
-      }));
+      let _publicPath = resolve(args.cwd, './public');
+      if (existsSync(_publicPath)) {
+        config.plugins.push(new CopyWebpackPlugin([{
+          from: _publicPath,
+          ignore: ['.*'],
+        }], {
+          copyUnmodified: true,
+        }));
+      }
     }
   });
 

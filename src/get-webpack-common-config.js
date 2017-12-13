@@ -10,7 +10,8 @@ import {
 } from 'path';
 import autoprefixer from 'autoprefixer';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+// import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ImageminPlugin from 'imagemin-webpack-plugin';
 import getBabelCommonConfig from './get-babel-common-config';
 
 export default function getWebpackCommonConfig(args) {
@@ -30,9 +31,9 @@ export default function getWebpackCommonConfig(args) {
     };
   }
 
-  const jsFileName = args.hash ? 'js/[name]-[chunkhash:8].js' : 'js/[name].js';
-  const cssFileName = args.hash ? 'css/[name]-[contenthash:8].css' : 'css/[name].css';
-  // const commonName = args.hash ? 'common-[chunkhash:8].js' : 'common.js';
+  const jsFileName = args.hash ? 'js/[name]-[chunkhash:5].js' : 'js/[name].js';
+  const cssFileName = args.hash ? 'css/[name]-[contenthash:5].css' : 'css/[name].css';
+  // const commonName = args.hash ? 'common-[chunkhash:5].js' : 'common.js';
 
   const silent = args.silent === true;
   const babelOptions = getBabelCommonConfig();
@@ -99,7 +100,7 @@ export default function getWebpackCommonConfig(args) {
           test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
           loader: 'url-loader',
           options: {
-            name: 'font/[hash:8].[ext]',
+            name: 'font/[name]-[hash:5].[ext]',
             limit: 8192,
             minetype: 'application/font-woff',
           },
@@ -108,7 +109,7 @@ export default function getWebpackCommonConfig(args) {
           test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
           loader: 'url-loader',
           options: {
-            name: 'font/[hash:8].[ext]',
+            name: 'font/[name]-[hash:5].[ext]',
             limit: 8192,
             minetype: 'application/font-woff',
           },
@@ -117,7 +118,7 @@ export default function getWebpackCommonConfig(args) {
           test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
           loader: 'url-loader',
           options: {
-            name: 'font/[hash:8].[ext]',
+            name: 'font/[name]-[hash:5].[ext]',
             limit: 8192,
             minetype: 'application/octet-stream',
           },
@@ -126,7 +127,7 @@ export default function getWebpackCommonConfig(args) {
           test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
           loader: 'url-loader',
           options: {
-            name: 'font/[hash:8].[ext]',
+            name: 'font/[name]-[hash:5].[ext]',
             limit: 8192,
             minetype: 'application/vnd.ms-fontobject',
           },
@@ -135,7 +136,7 @@ export default function getWebpackCommonConfig(args) {
           test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
           loader: 'url-loader',
           options: {
-            name: 'img/[hash:8].[ext]',
+            name: 'img/[name]-[hash:5].[ext]',
             limit: 8192,
             minetype: 'image/svg+xml',
           },
@@ -144,7 +145,7 @@ export default function getWebpackCommonConfig(args) {
           test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
           loader: 'url-loader',
           options: {
-            name: 'img/[hash:8].[ext]',
+            name: 'img/[name]-[hash:5].[ext]',
             limit: 8192,
           },
         },
@@ -174,6 +175,15 @@ export default function getWebpackCommonConfig(args) {
           }
           const error = errors[0];
           console.error(`${severity} : ${error.name}`);
+        },
+      }),
+      new ImageminPlugin({
+        disable: !!args.dev,
+        pngquant: {
+          quality: '95-100',
+        },
+        jpegtran: {
+          progressive: true,
         },
       }),
       // new HtmlWebpackPlugin({
