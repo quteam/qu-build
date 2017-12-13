@@ -50,14 +50,13 @@ qu-build init pages project-name
 
 ## Mock
 
-Use mockjs, mock storage directory `./src/api`, support `.js`,`.json`
+Use mockjs, mock storage directory `./src/api`, support `.js`,`.json`.
 
 ```javascript
 /**
  * @url /order/addOrderComment.do
  * 
  */
-
 module.exports = function (req) {
   return {
     success: Math.random() < 0.5 ? false : true,
@@ -66,7 +65,35 @@ module.exports = function (req) {
   };
 }
 ```
+or
+```json
+{
+    "msg": "@word",
+    "code": 200,
+}
+```
 
+If you use `jsonp`, request parameters increase `callback`. The return data will be `jsonp`.
+
+```javascript
+/**
+ *  http://localhost:8080/?callback=jQuery1513158553653
+ */
+jQuery1513158553653({
+  "msg": "abc",
+  "code": 200,
+})
+```
+
+## Directory
+
+```bash
+./public                # static resource directory;
+./api                   # mock directory;
+./src                   # development source code;
+./package.json          # project info
+./webpack.config.js     # custom webpack configuration
+```
 
 ## Config
 
