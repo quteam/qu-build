@@ -182,7 +182,6 @@ export default function build(args, callback) {
   });
 
   function doneHandler(err, stats) {
-    console.log(err, stats);
     if (args.json) {
       const filename = typeof args.json === 'boolean' ? 'build-bundle.json' : args.json;
       const jsonPath = join(fileOutputPath, filename);
