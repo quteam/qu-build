@@ -28,7 +28,7 @@ export default function devServer(compiler, args) {
 
   app.use(express.static('./public'));
   app.use(mockServer({
-    modules: [path.resolve(`${args.cwd}/src/api`)],
+    modules: [path.resolve(`${args.cwd}/api`), path.resolve(`${args.cwd}/src/api`)],
   }));
 
   app.listen(port, (err) => {
