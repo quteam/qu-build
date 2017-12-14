@@ -1,5 +1,5 @@
 const path = require('path');
-const glob = require('glob');
+const glob = require(path.resolve(process.mainModule.filename, '../../node_modules/glob'));
 const pkg = require('./package.json');
 
 // get entry
