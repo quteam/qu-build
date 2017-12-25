@@ -3,21 +3,49 @@
     "stage-0", [
       "env",
       {
-        "targets": {
-          "browsers": [
-            "Android >= 4",
-            "Chrome >= 35",
-            "Firefox >= 31",
-            "iOS >= 9",
-            "Opera >= 12",
-            "Safari >= 9",
-            "IE >= 9"
-          ]
-        }
-        // "modules": false,
-        // "useBuiltIns": true
+        "modules": false
       }
     ]
   ],
+  "env": {
+    "commonjs": {
+      "presets": [
+        "stage-0", [
+          "env",
+          {
+            "targets": {
+              "browsers": [
+                "Android >= 4",
+                "Chrome >= 35",
+                "Firefox >= 31",
+                "iOS >= 9",
+                "Opera >= 12",
+                "Safari >= 9",
+                "IE >= 9"
+              ]
+            }
+          }
+        ]
+      ]
+    },
+    "es": {
+      "presets": [
+        "stage-0", [
+          "env",
+          {
+            "modules": false
+          }
+        ]
+      ]
+    },
+    "test": {
+      "presets": [
+        "stage-0", [
+          "env"
+        ],
+        "jest"
+      ]
+    }
+  },
   "comments": false
 }

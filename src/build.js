@@ -156,7 +156,7 @@ export default function build(args, callback) {
       rimraf.sync(fileOutputPath);
 
       // 复制公共文件
-      let _publicPath = resolve(args.cwd, './public');
+      const _publicPath = resolve(args.cwd, './public');
       if (existsSync(_publicPath)) {
         config.plugins.push(new CopyWebpackPlugin([{
           from: _publicPath,

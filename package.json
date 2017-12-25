@@ -1,21 +1,47 @@
 {
   "name": "qu-build",
-  "version": "1.2.15",
+  "version": "1.3.0",
   "description": "Build tools for FE",
   "bin": {
     "qu-build": "./bin/build",
     "qu-build-init": "./bin/build-init"
   },
+  "main": "lib/build.js",
+  "module": "es/build.js",
   "files": [
     "bin",
+    "es",
     "lib",
     "template"
   ],
   "scripts": {
-    "build": "rimraf lib && babel src --out-dir lib",
+    "clean": "rimraf dist lib es",
+    "build:commonjs": "better-npm-run build-commonjs",
+    "build:es": "better-npm-run build-es",
+    "build": "npm run clean && npm run build:commonjs && npm run build:es",
     "lint": "eslint --ext .js src",
     "lint:fix": "eslint --fix --ext .js src",
-    "test": "jest"
+    "test": "better-npm-run test"
+  },
+  "betterScripts": {
+    "build-commonjs": {
+      "command": "babel src --out-dir lib",
+      "env": {
+        "BABEL_ENV": "commonjs"
+      }
+    },
+    "build-es": {
+      "command": "babel src --out-dir es",
+      "env": {
+        "BABEL_ENV": "es"
+      }
+    },
+    "test": {
+      "command": "jest --config jest.json",
+      "env": {
+        "BABEL_ENV": "test"
+      }
+    }
   },
   "repository": {
     "type": "git",
@@ -32,9 +58,11 @@
   "dependencies": {
     "autoprefixer": "^7.2.1",
     "babel-core": "^6.26.0",
+    "babel-jest": "^22.0.3",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
+    "better-npm-run": "^0.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "chalk": "^2.3.0",
     "commander": "^2.12.2",
@@ -42,6 +70,7 @@
     "copy-webpack-plugin": "^4.2.3",
     "css-loader": "^0.28.7",
     "eventsource-polyfill": "^0.9.6",
+    "expect": "^22.0.3",
     "express": "^4.16.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
