@@ -36,14 +36,17 @@ export default function getWebpackCommonConfig(args) {
   // const commonName = args.hash ? 'common-[chunkhash:5].js' : 'common.js';
 
   const silent = args.silent === true;
-  const babelOptions = getBabelCommonConfig();
+  const babelOptions = getBabelCommonConfig(args);
+
+  const browsersObj = {};
+  if (!pkg.browserslist) {
+    browsersObj.browsers = ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 9', 'iOS >= 8', 'Android >= 4'];
+  }
 
   const postcssOptions = {
     sourceMap: true,
     plugins: [
-      autoprefixer({
-        browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 9', 'iOS >= 8', 'Android >= 4'],
-      }),
+      autoprefixer(browsersObj),
     ],
   };
 

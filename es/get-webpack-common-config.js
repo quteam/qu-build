@@ -35,13 +35,16 @@ export default function getWebpackCommonConfig(args) {
 
 
   var silent = args.silent === true;
-  var babelOptions = getBabelCommonConfig();
+  var babelOptions = getBabelCommonConfig(args);
+
+  var browsersObj = {};
+  if (!pkg.browserslist) {
+    browsersObj.browsers = ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 9', 'iOS >= 8', 'Android >= 4'];
+  }
 
   var postcssOptions = {
     sourceMap: true,
-    plugins: [autoprefixer({
-      browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 9', 'iOS >= 8', 'Android >= 4']
-    })]
+    plugins: [autoprefixer(browsersObj)]
   };
 
   var emptyBuildins = ['child_process', 'cluster', 'dgram', 'dns', 'fs', 'module', 'net', 'readline', 'repl', 'tls'];
