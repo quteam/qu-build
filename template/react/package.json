@@ -1,0 +1,20 @@
+{
+  "name": "example",
+  "version": "0.0.1",
+  "description": "example",
+  "main": "index.js",
+  "entry": {
+    "index": "./src"
+  },
+  "scripts": {
+    "dev": "qu-build -d",
+    "build": "qu-build -b",
+    "test": "qu-build -t"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}

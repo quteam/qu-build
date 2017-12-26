@@ -3,6 +3,7 @@ import {
 } from 'os';
 import presetStage0 from 'babel-preset-stage-0';
 import presetEnv from 'babel-preset-env';
+import presetReact from 'babel-preset-react';
 
 export default function babel() {
   return {
@@ -26,6 +27,7 @@ export default function babel() {
           // useBuiltIns: true,
         },
       ],
+      presetReact,
     ],
     plugins: [
       require.resolve('babel-plugin-transform-class-properties'),
