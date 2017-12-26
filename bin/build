@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-process.env.NODE_OPTIONS = '--experimental-modules';
-
 function interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {
     default: obj,

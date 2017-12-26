@@ -1,13 +1,15 @@
 import {
   tmpdir,
 } from 'os';
+import presetStage0 from 'babel-preset-stage-0';
+import presetEnv from 'babel-preset-env';
 
 export default function babel() {
   return {
     cacheDirectory: tmpdir(),
     presets: [
-      require.resolve('babel-preset-stage-0'), [
-        require.resolve('babel-preset-env'),
+      presetStage0, [
+        presetEnv,
         {
           targets: {
             browsers: [
@@ -26,8 +28,8 @@ export default function babel() {
       ],
     ],
     plugins: [
-      // require.resolve('babel-plugin-add-module-exports'),
-      // require.resolve('babel-plugin-transform-decorators-legacy'),
+      require.resolve('babel-plugin-transform-class-properties'),
+      require.resolve('babel-plugin-transform-decorators-legacy'),
     ],
     comments: false,
   };

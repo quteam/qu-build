@@ -70,20 +70,52 @@
 "use strict";
 
 
-var _dec, _class;
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var calls = [];
+var Parent = function Parent() {
+  _classCallCheck(this, Parent);
 
-function dec(id) {
-  calls.push(id);
-  return function () {};
-}
+  console.log('Parent constructor');
+  this.name = 'john';
+};
 
-var Example = (_dec = dec(1), _dec(_class = function Example() {
-  _classCallCheck(this, Example);
-}) || _class);
+var A = function (_Parent) {
+  _inherits(A, _Parent);
+
+  function A() {
+    _classCallCheck(this, A);
+
+    console.log('Child constructor');
+    return _possibleConstructorReturn(this, (A.__proto__ || Object.getPrototypeOf(A)).call(this));
+  }
+
+  _createClass(A, [{
+    key: 'foo',
+    value: function foo() {
+      console.log('foo', this.name);
+    }
+  }], [{
+    key: 'method',
+    value: function method(obj) {
+      console.log('method', obj);
+    }
+  }]);
+
+  return A;
+}(Parent);
+
+A.propTypes = 1;
+
+
+var a = new A();
+a.foo();
+A.method('haha');
 
 /***/ })
 /******/ ]);

@@ -49,7 +49,7 @@ describe('lib/build', () => {
   it('should build normally', () => testBuild({
     hash: true,
   }, 'build-normal'));
-  // it('should support class property', () => testBuild({}, 'build-class-property'));
+  it('should support class property', () => testBuild({}, 'build-class-property'));
   it('should support less', () => testBuild({}, 'build-less'));
   it('should support css modules', () => testBuild({}, 'build-css-modules'));
   it('should support add-module-exports', () => testBuild({}, 'build-add-module-exports'));
