@@ -178,7 +178,7 @@ export default function build(args, callback) {
         config.plugins.push(new SWPrecacheWebpackPlugin({
           cacheId: `${pkg.name}-res`,
           filename: 'sw.js',
-          staticFileGlobs: [`${fileOutputPath}/**/*.{js,css,jpg,jpeg,png,gif,ico}`],
+          staticFileGlobs: [`${fileOutputPath}/**/*.{js,css,jpg,jpeg,png,gif,ico,woff,woff2,ttf,svg,eot}`],
           minify: true,
           navigateFallback: '/fail.html',
           stripPrefix: `${fileOutputPath}`,
