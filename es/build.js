@@ -7,6 +7,7 @@ import rimraf from 'rimraf';
 import chalk from 'chalk';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
 import mergeCustomConfig from './merge-custom-config';
 import getWebpackCommonConfig from './get-webpack-common-config';
 import injectLoaderOptions from './inject-loader-options';
@@ -24,7 +25,12 @@ function checkConfig(webpackConfig) {
   }
 }
 
-function getWebpackConfig(args, cache) {
+function getWebpackConfig() {
+  var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+    cwd: process.cwd()
+  };
+  var cache = arguments[1];
+
   var webpackConfig = getWebpackCommonConfig(args);
   injectLoaderOptions(webpackConfig, args);
 
@@ -72,52 +78,52 @@ function getWebpackConfig(args, cache) {
   } else {
     webpackConfig = mergeCustomConfig(webpackConfig, resolve(args.cwd, args.config || 'webpack.config.js'));
   }
+
+  var commonName = args.hash ? 'js/common-[chunkhash:5].js' : 'js/common.js';
+  var entryArr = Object.keys(webpackConfig.entry);
+  entryArr.map(function (pathname) {
+    var conf = {
+      filename: pathname + '.html',
+      template: webpackConfig.entry[pathname] + '/page.html',
+      inject: true,
+      chunksSortMode: 'dependency'
+    };
+
+    if (args.dev) {
+      conf.hash = true;
+    } else {
+      conf.minify = {
+        removeComments: true,
+        collapseWhitespace: true,
+        minifyJS: true
+      };
+      conf.filename = 'html/' + pathname + '.html';
+    }
+
+    if (entryArr.length > 1) {
+      conf.chunks = ['common', pathname];
+    }
+
+    webpackConfig.plugins.push(new HtmlWebpackPlugin(conf));
+  });
+  if (entryArr.length > 1) {
+    webpackConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+      name: 'common',
+      filename: commonName
+    }));
+  }
+
   checkConfig(webpackConfig);
   return webpackConfig;
 }
 
+export { webpack, getWebpackConfig };
+
 export default function build(args, callback) {
-  var commonName = args.hash ? 'js/common-[chunkhash:5].js' : 'js/common.js';
+  var pkg = require(join(args.cwd, 'package.json'));
 
   var webpackConfig = getWebpackConfig(args, {});
   webpackConfig = Array.isArray(webpackConfig) ? webpackConfig : [webpackConfig];
-
-  webpackConfig.forEach(function (config) {
-    var entryArr = Object.keys(config.entry);
-
-    entryArr.map(function (pathname) {
-      var conf = {
-        filename: pathname + '.html',
-        template: config.entry[pathname] + '/page.html',
-        inject: true,
-        chunksSortMode: 'dependency'
-      };
-
-      if (args.dev) {
-        conf.hash = true;
-      } else {
-        conf.minify = {
-          removeComments: true,
-          collapseWhitespace: true,
-          minifyJS: true
-        };
-        conf.filename = 'html/' + pathname + '.html';
-      }
-
-      if (entryArr.length > 1) {
-        conf.chunks = ['common', pathname];
-      }
-
-      config.plugins.push(new HtmlWebpackPlugin(conf));
-    });
-
-    if (entryArr.length > 1) {
-      config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-        name: 'common',
-        filename: commonName
-      }));
-    }
-  });
 
   var fileOutputPath = void 0;
   webpackConfig.forEach(function (config) {
@@ -131,6 +137,17 @@ export default function build(args, callback) {
       });
     } else {
       rimraf.sync(fileOutputPath);
+
+      if (args.pwa) {
+        config.plugins.push(new SWPrecacheWebpackPlugin({
+          cacheId: pkg.name + '-res',
+          filename: 'sw.js',
+          staticFileGlobs: [fileOutputPath + '/**/*.{js,css,jpg,jpeg,png,gif,ico}'],
+          minify: true,
+          navigateFallback: '/fail.html',
+          stripPrefix: '' + fileOutputPath
+        }));
+      }
 
       var _publicPath = resolve(args.cwd, './public');
       if (existsSync(_publicPath)) {

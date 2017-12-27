@@ -13,6 +13,7 @@ import rimraf from 'rimraf';
 import chalk from 'chalk';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
 import mergeCustomConfig from './merge-custom-config';
 import getWebpackCommonConfig from './get-webpack-common-config';
 import injectLoaderOptions from './inject-loader-options';
@@ -28,7 +29,9 @@ function checkConfig(webpackConfig) {
   }
 }
 
-function getWebpackConfig(args, cache) {
+function getWebpackConfig(args = {
+  cwd: process.cwd(),
+}, cache) {
   let webpackConfig = getWebpackCommonConfig(args);
   injectLoaderOptions(webpackConfig, args);
 
@@ -90,54 +93,58 @@ function getWebpackConfig(args, cache) {
   } else {
     webpackConfig = mergeCustomConfig(webpackConfig, resolve(args.cwd, args.config || 'webpack.config.js'));
   }
+
+  // Multi html pages 多入口多页面
+  const commonName = args.hash ? 'js/common-[chunkhash:5].js' : 'js/common.js';
+  const entryArr = Object.keys(webpackConfig.entry);
+  entryArr.map((pathname) => {
+    // 配置生成的html文件，定义路径等
+    const conf = {
+      filename: `${pathname}.html`,
+      template: `${webpackConfig.entry[pathname]}/page.html`,
+      inject: true,
+      chunksSortMode: 'dependency',
+    };
+
+    if (args.dev) {
+      conf.hash = true;
+    } else {
+      conf.minify = {
+        removeComments: true,
+        collapseWhitespace: true,
+        minifyJS: true,
+      };
+      conf.filename = `html/${pathname}.html`;
+    }
+
+    if (entryArr.length > 1) {
+      conf.chunks = ['common', pathname];
+    }
+
+    webpackConfig.plugins.push(new HtmlWebpackPlugin(conf));
+  });
+  if (entryArr.length > 1) {
+    webpackConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+      name: 'common',
+      filename: commonName,
+    }));
+  }
+
   checkConfig(webpackConfig);
   return webpackConfig;
 }
 
+export {
+  webpack,
+  getWebpackConfig,
+};
+
 export default function build(args, callback) {
-  const commonName = args.hash ? 'js/common-[chunkhash:5].js' : 'js/common.js';
+  const pkg = require(join(args.cwd, 'package.json'));
   // Get config.
   let webpackConfig = getWebpackConfig(args, {});
   webpackConfig = Array.isArray(webpackConfig) ? webpackConfig : [webpackConfig];
 
-  // Multi html pages 多入口多页面
-  webpackConfig.forEach((config) => {
-    const entryArr = Object.keys(config.entry);
-
-    entryArr.map((pathname) => {
-      // 配置生成的html文件，定义路径等
-      const conf = {
-        filename: `${pathname}.html`,
-        template: `${config.entry[pathname]}/page.html`,
-        inject: true,
-        chunksSortMode: 'dependency',
-      };
-
-      if (args.dev) {
-        conf.hash = true;
-      } else {
-        conf.minify = {
-          removeComments: true,
-          collapseWhitespace: true,
-          minifyJS: true,
-        };
-        conf.filename = `html/${pathname}.html`;
-      }
-
-      if (entryArr.length > 1) {
-        conf.chunks = ['common', pathname];
-      }
-
-      config.plugins.push(new HtmlWebpackPlugin(conf));
-    });
-
-    if (entryArr.length > 1) {
-      config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-        name: 'common',
-        filename: commonName,
-      }));
-    }
-  });
 
   // 差异配置
   let fileOutputPath;
@@ -154,6 +161,18 @@ export default function build(args, callback) {
     } else {
       // Remove output path
       rimraf.sync(fileOutputPath);
+
+      // PWA
+      if (args.pwa) {
+        config.plugins.push(new SWPrecacheWebpackPlugin({
+          cacheId: `${pkg.name}-res`,
+          filename: 'sw.js',
+          staticFileGlobs: [`${fileOutputPath}/**/*.{js,css,jpg,jpeg,png,gif,ico}`],
+          minify: true,
+          navigateFallback: '/fail.html',
+          stripPrefix: `${fileOutputPath}`,
+        }));
+      }
 
       // 复制公共文件
       const _publicPath = resolve(args.cwd, './public');

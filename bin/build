@@ -22,6 +22,7 @@ program
   .option('-p, --port [port]', 'develop server port, default is 8080')
   .option('-b, --build', 'build this project')
   .option('-t, --test', 'test this project, use jest')
+  .option('--pwa', 'use pwa')
   .option('--hash', 'build with hash and output map.json')
   .option('--publicPath <publicPath>', 'publicPath for webpack')
   .option('--devtool <devtool>', 'sourcemap generate method, default is null')
