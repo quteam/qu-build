@@ -138,6 +138,16 @@ export default function build(args, callback) {
     } else {
       rimraf.sync(fileOutputPath);
 
+      var _publicPath = resolve(args.cwd, './public');
+      if (existsSync(_publicPath)) {
+        config.plugins.push(new CopyWebpackPlugin([{
+          from: _publicPath,
+          ignore: ['.*']
+        }], {
+          copyUnmodified: true
+        }));
+      }
+
       if (args.pwa) {
         config.plugins.push(new SWPrecacheWebpackPlugin({
           cacheId: pkg.name + '-res',
@@ -146,16 +156,6 @@ export default function build(args, callback) {
           minify: true,
           navigateFallback: '/fail.html',
           stripPrefix: '' + fileOutputPath
-        }));
-      }
-
-      var _publicPath = resolve(args.cwd, './public');
-      if (existsSync(_publicPath)) {
-        config.plugins.push(new CopyWebpackPlugin([{
-          from: _publicPath,
-          ignore: ['.*']
-        }], {
-          copyUnmodified: true
         }));
       }
     }

@@ -162,6 +162,17 @@ export default function build(args, callback) {
       // Remove output path
       rimraf.sync(fileOutputPath);
 
+      // 复制公共文件
+      const _publicPath = resolve(args.cwd, './public');
+      if (existsSync(_publicPath)) {
+        config.plugins.push(new CopyWebpackPlugin([{
+          from: _publicPath,
+          ignore: ['.*'],
+        }], {
+          copyUnmodified: true,
+        }));
+      }
+
       // PWA
       if (args.pwa) {
         config.plugins.push(new SWPrecacheWebpackPlugin({
@@ -171,17 +182,6 @@ export default function build(args, callback) {
           minify: true,
           navigateFallback: '/fail.html',
           stripPrefix: `${fileOutputPath}`,
-        }));
-      }
-
-      // 复制公共文件
-      const _publicPath = resolve(args.cwd, './public');
-      if (existsSync(_publicPath)) {
-        config.plugins.push(new CopyWebpackPlugin([{
-          from: _publicPath,
-          ignore: ['.*'],
-        }], {
-          copyUnmodified: true,
         }));
       }
     }
