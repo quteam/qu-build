@@ -66,7 +66,7 @@ function mock(_opts) {
       return res.send('');
     }
 
-    var url = req.url.split('?')[0];
+    var url = req.originalUrl.split('?')[0];
 
     if (url === '/api') {
       var host = req.protocol + '://' + req.headers.host + req.baseUrl;

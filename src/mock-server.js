@@ -73,7 +73,7 @@ function mock(_opts) {
       return res.send('');
     }
 
-    const url = req.url.split('?')[0];
+    const url = req.originalUrl.split('?')[0];
 
     // api document page
     if (url === '/api') {
