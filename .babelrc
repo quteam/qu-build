@@ -1,17 +1,19 @@
 {
   "presets": [
-    "stage-0", [
-      "env",
+    "@babel/preset-stage-0", [
+      "@babel/preset-env",
       {
-        "modules": false
+        "modules": false,
+        "useBuiltIns": "usage",
+        "loose": true
       }
     ]
   ],
   "env": {
     "commonjs": {
       "presets": [
-        "stage-0", [
-          "env",
+        "@babel/preset-stage-0", [
+          "@babel/preset-env",
           {
             "targets": {
               "browsers": [
@@ -23,32 +25,34 @@
                 "Safari >= 9",
                 "IE >= 9"
               ]
-            }
+            },
+            "useBuiltIns": "usage"
           }
         ]
       ]
     },
     "es": {
       "presets": [
-        "stage-0", [
-          "env",
+        "@babel/preset-stage-0", [
+          "@babel/preset-env",
           {
-            "modules": false
+            "modules": false,
+            "useBuiltIns": "usage"
           }
         ]
       ]
     },
     "test": {
       "presets": [
-        "stage-0", [
-          "env"
+        "@babel/preset-stage-0", [
+          "@babel/preset-env", {
+            "useBuiltIns": "usage",
+            "loose": true
+          }
         ]
       ]
     }
   },
-  "plugins": [
-    "transform-decorators-legacy",
-    "transform-class-properties"
-  ],
+  "plugins": [],
   "comments": false
 }

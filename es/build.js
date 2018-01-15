@@ -1,4 +1,7 @@
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+import "core-js/modules/es6.array.from";
+import "core-js/modules/es6.function.name";
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 import { join, resolve } from 'path';
 import { writeFileSync, existsSync } from 'fs';
@@ -18,6 +21,7 @@ function checkConfig(webpackConfig) {
   var hasEmptyEntry = config.some(function (c) {
     return Object.keys(c.entry || {}).length === 0;
   });
+
   if (hasEmptyEntry) {
     var err = new Error('no webpack entry found');
     err.name = 'NoEntry';
@@ -29,11 +33,9 @@ function getWebpackConfig() {
   var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
     cwd: process.cwd()
   };
-  var cache = arguments[1];
-
+  var cache = arguments.length > 1 ? arguments[1] : undefined;
   var webpackConfig = getWebpackCommonConfig(args);
   injectLoaderOptions(webpackConfig, args);
-
   webpackConfig.plugins = webpackConfig.plugins || [];
 
   if (args.outputPath) {
@@ -45,7 +47,7 @@ function getWebpackConfig() {
   }
 
   if (args.compress && !args.dev && !args.watch) {
-    webpackConfig.plugins = [].concat(_toConsumableArray(webpackConfig.plugins), [new webpack.optimize.UglifyJsPlugin({
+    webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new webpack.optimize.UglifyJsPlugin({
       parallel: true,
       output: {
         ascii_only: true
@@ -57,17 +59,17 @@ function getWebpackConfig() {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
     })]);
   } else {
-    webpackConfig.plugins = [].concat(_toConsumableArray(webpackConfig.plugins), [new webpack.DefinePlugin({
+    webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     })]);
   }
 
-  webpackConfig.plugins = [].concat(_toConsumableArray(webpackConfig.plugins), [new webpack.NoEmitOnErrorsPlugin()]);
+  webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new webpack.NoEmitOnErrorsPlugin()]);
 
   if (args.hash) {
     var pkg = require(join(args.cwd, 'package.json'));
 
-    webpackConfig.plugins = [].concat(_toConsumableArray(webpackConfig.plugins), [require('map-json-webpack-plugin')({
+    webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([require('map-json-webpack-plugin')({
       assetsPath: pkg.name,
       cache: cache
     })]);
@@ -83,8 +85,8 @@ function getWebpackConfig() {
   var entryArr = Object.keys(webpackConfig.entry);
   entryArr.map(function (pathname) {
     var conf = {
-      filename: pathname + '.html',
-      template: webpackConfig.entry[pathname] + '/page.html',
+      filename: "".concat(pathname, ".html"),
+      template: "".concat(webpackConfig.entry[pathname], "/page.html"),
       inject: true,
       chunksSortMode: 'dependency'
     };
@@ -97,7 +99,7 @@ function getWebpackConfig() {
         collapseWhitespace: true,
         minifyJS: true
       };
-      conf.filename = 'html/' + pathname + '.html';
+      conf.filename = "html/".concat(pathname, ".html");
     }
 
     if (entryArr.length > 1) {
@@ -106,6 +108,7 @@ function getWebpackConfig() {
 
     webpackConfig.plugins.push(new HtmlWebpackPlugin(conf));
   });
+
   if (entryArr.length > 1) {
     webpackConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
@@ -118,14 +121,12 @@ function getWebpackConfig() {
 }
 
 export { webpack, getWebpackConfig };
-
 export default function build(args, callback) {
   var pkg = require(join(args.cwd, 'package.json'));
 
   var webpackConfig = getWebpackConfig(args, {});
   webpackConfig = Array.isArray(webpackConfig) ? webpackConfig : [webpackConfig];
-
-  var fileOutputPath = void 0;
+  var fileOutputPath;
   webpackConfig.forEach(function (config) {
     fileOutputPath = config.output.path;
 
@@ -139,6 +140,7 @@ export default function build(args, callback) {
       rimraf.sync(fileOutputPath);
 
       var _publicPath = resolve(args.cwd, './public');
+
       if (existsSync(_publicPath)) {
         config.plugins.push(new CopyWebpackPlugin([{
           from: _publicPath,
@@ -150,23 +152,23 @@ export default function build(args, callback) {
 
       if (args.pwa) {
         config.plugins.push(new SWPrecacheWebpackPlugin({
-          cacheId: pkg.name + '-res',
+          cacheId: "".concat(pkg.name, "-res"),
           filename: 'sw.js',
-          staticFileGlobs: [fileOutputPath + '/**/*.{js,css,jpg,jpeg,png,gif,ico,woff,woff2,ttf,svg,eot}'],
+          staticFileGlobs: ["".concat(fileOutputPath, "/**/*.{js,css,jpg,jpeg,png,gif,ico,woff,woff2,ttf,svg,eot}")],
           minify: true,
           navigateFallback: '/fail.html',
-          stripPrefix: '' + fileOutputPath
+          stripPrefix: "".concat(fileOutputPath)
         }));
       }
     }
   });
-
   webpackConfig.forEach(function (config) {
     config.plugins.push(new ProgressPlugin(function (percentage, msg, addInfo) {
       var stream = process.stderr;
+
       if (stream.isTTY && percentage < 0.71) {
         stream.cursorTo(0);
-        stream.write(chalk.magenta(msg) + ' (' + chalk.magenta(addInfo) + ')');
+        stream.write("".concat(chalk.magenta(msg), " (").concat(chalk.magenta(addInfo), ")"));
         stream.clearLine(1);
       } else if (percentage === 1) {}
     }));
@@ -177,11 +179,12 @@ export default function build(args, callback) {
       console.log(err);
       return;
     }
+
     if (args.json) {
       var filename = typeof args.json === 'boolean' ? 'build-bundle.json' : args.json;
       var jsonPath = join(fileOutputPath, filename);
       writeFileSync(jsonPath, JSON.stringify(stats.toJson()), 'utf-8');
-      console.log('Generate Json File: ' + jsonPath);
+      console.log("Generate Json File: ".concat(jsonPath));
     }
 
     var _stats$toJson = stats.toJson(),
@@ -201,6 +204,7 @@ export default function build(args, callback) {
         hash: !!args.verbose,
         version: !!args.verbose
       });
+
       if (stats.hasErrors()) {
         console.error(buildInfo);
       } else {

@@ -7,9 +7,10 @@ import {
 import {
   join,
 } from 'path';
-import presetStage0 from 'babel-preset-stage-0';
-import presetEnv from 'babel-preset-env';
-import presetReact from 'babel-preset-react';
+import presetStage0 from '@babel/preset-stage-0';
+import presetEnv from '@babel/preset-env';
+import presetReact from '@babel/preset-react';
+import transformRuntime from '@babel/plugin-transform-runtime';
 
 export default function babel(args) {
   const pkgPath = join(args.cwd, 'package.json');
@@ -29,15 +30,12 @@ export default function babel(args) {
             browsers: browsersObj.browsers,
           },
           modules: false,
-          // useBuiltIns: true,
+          useBuiltIns: 'usage',
         },
       ],
       presetReact,
     ],
-    plugins: [
-      require.resolve('babel-plugin-transform-class-properties'),
-      require.resolve('babel-plugin-transform-decorators-legacy'),
-    ],
+    plugins: [],
     comments: false,
   };
 }
