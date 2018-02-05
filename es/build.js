@@ -1,4 +1,5 @@
 import "core-js/modules/es6.array.from";
+import "core-js/modules/es6.object.assign";
 import "core-js/modules/es6.function.name";
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -34,6 +35,9 @@ function getWebpackConfig() {
     cwd: process.cwd()
   };
   var cache = arguments.length > 1 ? arguments[1] : undefined;
+
+  var pkg = require(join(args.cwd, 'package.json'));
+
   var webpackConfig = getWebpackCommonConfig(args);
   injectLoaderOptions(webpackConfig, args);
   webpackConfig.plugins = webpackConfig.plugins || [];
@@ -67,8 +71,6 @@ function getWebpackConfig() {
   webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new webpack.NoEmitOnErrorsPlugin()]);
 
   if (args.hash) {
-    var pkg = require(join(args.cwd, 'package.json'));
-
     webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([require('map-json-webpack-plugin')({
       assetsPath: pkg.name,
       cache: cache
@@ -94,11 +96,11 @@ function getWebpackConfig() {
     if (args.dev) {
       conf.hash = true;
     } else {
-      conf.minify = {
+      conf.minify = Object.assign({
         removeComments: true,
         collapseWhitespace: true,
         minifyJS: true
-      };
+      }, pkg.htmlConfig || {});
       conf.filename = "html/".concat(pathname, ".html");
     }
 

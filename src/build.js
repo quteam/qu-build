@@ -32,6 +32,7 @@ function checkConfig(webpackConfig) {
 function getWebpackConfig(args = {
   cwd: process.cwd(),
 }, cache) {
+  const pkg = require(join(args.cwd, 'package.json'));
   let webpackConfig = getWebpackCommonConfig(args);
   injectLoaderOptions(webpackConfig, args);
 
@@ -77,7 +78,6 @@ function getWebpackConfig(args = {
 
   // Output map.json if hash.
   if (args.hash) {
-    const pkg = require(join(args.cwd, 'package.json'));
     // webpackConfig.output.filename = '[name]-[chunkhash].js';
     // webpackConfig.output.chunkFilename = '[name]-[chunkhash].js';
     webpackConfig.plugins = [...webpackConfig.plugins,
@@ -109,11 +109,11 @@ function getWebpackConfig(args = {
     if (args.dev) {
       conf.hash = true;
     } else {
-      conf.minify = {
+      conf.minify = Object.assign({
         removeComments: true,
         collapseWhitespace: true,
         minifyJS: true,
-      };
+      }, pkg.htmlConfig || {});
       conf.filename = `html/${pathname}.html`;
     }
 
