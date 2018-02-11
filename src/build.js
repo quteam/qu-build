@@ -54,6 +54,7 @@ function getWebpackConfig(args = {
       new webpack.optimize.UglifyJsPlugin({
         parallel: true,
         output: {
+          comments: false,
           ascii_only: true,
         },
         compress: {

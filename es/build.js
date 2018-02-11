@@ -54,6 +54,7 @@ function getWebpackConfig() {
     webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new webpack.optimize.UglifyJsPlugin({
       parallel: true,
       output: {
+        comments: false,
         ascii_only: true
       },
       compress: {
