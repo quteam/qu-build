@@ -60,8 +60,10 @@ export default function getWebpackCommonConfig(args) {
     return obj;
   }, {});
   var config = {
-    babel: babelOptions,
-    postcss: postcssOptions,
+    options: {
+      babel: babelOptions,
+      postcss: postcssOptions
+    },
     output: {
       path: pkg.outputPath ? join(process.cwd(), "./".concat(pkg.outputPath, "/").concat(pkg.name, "/").concat(pkg.version)) : join(process.cwd(), './dist/'),
       filename: jsFileName,

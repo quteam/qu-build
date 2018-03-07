@@ -1,0 +1,18 @@
+{
+  "name": "example",
+  "version": "0.0.1",
+  "description": "example",
+  "main": "index.js",
+  "entry": {
+    "index": "./src"
+  },
+  "outputPath": "release",
+  "scripts": {
+    "dev": "epi-build -d",
+    "build": "epi-build -b",
+    "test": "epi-build -t"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {}
+}

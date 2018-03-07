@@ -32,7 +32,9 @@ function checkConfig(webpackConfig) {
 function getWebpackConfig(args = {
   cwd: process.cwd(),
 }, cache) {
-  const pkg = require(join(args.cwd, 'package.json'));
+  const pkgPath = join(args.cwd, 'package.json');
+  const pkg = existsSync(pkgPath) ? require(pkgPath) : {};
+
   let webpackConfig = getWebpackCommonConfig(args);
   injectLoaderOptions(webpackConfig, args);
 
@@ -141,7 +143,8 @@ export {
 };
 
 export default function build(args, callback) {
-  const pkg = require(join(args.cwd, 'package.json'));
+  const pkgPath = join(args.cwd, 'package.json');
+  const pkg = existsSync(pkgPath) ? require(pkgPath) : {};
   // Get config.
   let webpackConfig = getWebpackConfig(args, {});
   webpackConfig = Array.isArray(webpackConfig) ? webpackConfig : [webpackConfig];

@@ -35,9 +35,8 @@ function getWebpackConfig() {
     cwd: process.cwd()
   };
   var cache = arguments.length > 1 ? arguments[1] : undefined;
-
-  var pkg = require(join(args.cwd, 'package.json'));
-
+  var pkgPath = join(args.cwd, 'package.json');
+  var pkg = existsSync(pkgPath) ? require(pkgPath) : {};
   var webpackConfig = getWebpackCommonConfig(args);
   injectLoaderOptions(webpackConfig, args);
   webpackConfig.plugins = webpackConfig.plugins || [];
@@ -125,8 +124,8 @@ function getWebpackConfig() {
 
 export { webpack, getWebpackConfig };
 export default function build(args, callback) {
-  var pkg = require(join(args.cwd, 'package.json'));
-
+  var pkgPath = join(args.cwd, 'package.json');
+  var pkg = existsSync(pkgPath) ? require(pkgPath) : {};
   var webpackConfig = getWebpackConfig(args, {});
   webpackConfig = Array.isArray(webpackConfig) ? webpackConfig : [webpackConfig];
   var fileOutputPath;

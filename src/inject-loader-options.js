@@ -23,8 +23,8 @@ function injectPostcssOptions(webpackConfig, args) {
   }
 
   const canCompress = args.compress && !args.dev && !args.watch;
-  const postcssOptions = webpackConfig.postcss;
-  delete webpackConfig.postcss; // eslint-disable-line
+  const postcssOptions = webpackConfig.options.postcss;
+  // delete webpackConfig.postcss; // eslint-disable-line
 
   // const pkgPath = join(args.cwd, 'package.json');
   // const pkg = existsSync(pkgPath) ? require(pkgPath) : {};
@@ -124,8 +124,8 @@ function injectPostcssOptions(webpackConfig, args) {
 }
 
 function injectBabelOptions(webpackConfig) {
-  const babelOptions = webpackConfig.babel;
-  delete webpackConfig.babel; // eslint-disable-line
+  const babelOptions = webpackConfig.options.babel;
+  // delete webpackConfig.babel; // eslint-disable-line
 
   webpackConfig.module.rules.push({
     test: /\.jsx?$/,
@@ -149,7 +149,26 @@ function injectBabelOptions(webpackConfig) {
   });
 }
 
+// vue 模版文件预处理
+function injectVueTplOptions(webpackConfig, args) {
+  const canCompress = args.compress && !args.dev && !args.watch;
+  const postcssOptions = webpackConfig.options.postcss;
+  const babelOptions = webpackConfig.options.babel;
+
+  // console.log(postcssOptions.plugins[0]);
+  // console.log(babelOptions);
+
+  webpackConfig.module.rules.push({
+    test: /\.vue.tpl$/,
+    loader: 'vue-template-loader',
+  });
+}
+
 export default function injectLoaderOptions(webpackConfig, args) {
   injectPostcssOptions(webpackConfig, args);
   injectBabelOptions(webpackConfig);
+  injectVueTplOptions(webpackConfig, args);
+
+  // 清楚自定义配置
+  delete webpackConfig.options;
 }
