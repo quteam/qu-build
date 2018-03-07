@@ -1,6 +1,10 @@
+import "core-js/modules/es6.array.sort";
 import "core-js/modules/es6.regexp.split";
+import "core-js/modules/es6.array.index-of";
 import "core-js/modules/es6.regexp.replace";
 import "core-js/modules/es6.regexp.match";
+import "core-js/modules/es6.string.trim";
+import "core-js/modules/es6.array.map";
 import fs from 'fs';
 import Mock, { Random } from 'mockjs';
 import walkdir from 'node-walkdir';

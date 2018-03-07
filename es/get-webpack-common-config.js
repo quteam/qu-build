@@ -1,6 +1,8 @@
 import "core-js/modules/es6.object.assign";
+import "core-js/modules/es6.array.is-array";
 import "core-js/modules/es6.symbol";
 import "core-js/modules/web.dom.iterable";
+import "core-js/modules/es6.array.reduce";
 import "core-js/modules/es6.regexp.split";
 import "core-js/modules/es6.function.name";
 
