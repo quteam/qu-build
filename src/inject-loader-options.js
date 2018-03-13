@@ -43,6 +43,7 @@ function injectPostcssOptions(webpackConfig, args) {
   // }
 
   webpackConfig.module.rules.push({
+    enforce: 'post',
     test(filePath) {
       return /\.css$/.test(filePath) && !/\.module\.css$/.test(filePath);
     },
@@ -75,6 +76,7 @@ function injectPostcssOptions(webpackConfig, args) {
       },
     ]),
   }, {
+    enforce: 'post',
     test(filePath) {
       return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
     },
@@ -160,7 +162,7 @@ function injectVueTplOptions(webpackConfig, args) {
 
   webpackConfig.module.rules.push({
     test: /\.vue.tpl$/,
-    loader: 'vue-template-loader',
+    loader: 'vue-tpl-loader',
   });
 }
 

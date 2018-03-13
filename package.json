@@ -1,6 +1,6 @@
 {
   "name": "qu-build",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Build tools for FE",
   "bin": {
     "qu-build": "./bin/build",
@@ -100,7 +100,7 @@
     "url-loader": "^0.6.2",
     "vue": "^2.5.13",
     "vue-template-compiler": "^2.5.13",
-    "vue-template-loader": "^0.4.1",
+    "vue-tpl-loader": "^0.4.2",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^1.12.2",
     "webpack-hot-middleware": "^2.21.0"
