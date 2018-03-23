@@ -1,5 +1,4 @@
-import style from './style.less';
-import withRender from './page.vue.tpl';
+import withRender from './page.vue.tpl?scoped&style=./style.less';
 
 export default withRender({
   data() {
@@ -11,6 +10,6 @@ export default withRender({
   methods: {
     click() {
       this.count++;
-    }
-  }
+    },
+  },
 });

@@ -7,11 +7,8 @@ body {
 .ms-main-wrap {
     display: flex;
     min-height: 400px;
-    .tt {
-        color: red;
-    }
 }
 
-.ms-main-wrap .aa {
+.ms-main-wrap .tt {
     color: red;
 }

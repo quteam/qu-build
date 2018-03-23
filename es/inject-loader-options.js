@@ -18,74 +18,55 @@ function injectPostcssOptions(webpackConfig, args) {
 
   var canCompress = args.compress && !args.dev && !args.watch;
   var postcssOptions = webpackConfig.options.postcss;
+  var cssLoaderRule = {
+    loader: 'css-loader',
+    options: {
+      sourceMap: true,
+      minimize: canCompress
+    }
+  };
+  var cssLoaderRule2 = {
+    loader: 'css-loader',
+    options: {
+      sourceMap: true,
+      modules: true,
+      minimize: canCompress,
+      localIdentName: '[local]___[hash:base62:5]'
+    }
+  };
+  var postCSSRule = {
+    loader: 'postcss-loader',
+    options: postcssOptions
+  };
+  var lessLoaderRule = {
+    loader: 'less-loader',
+    options: {
+      sourceMap: true
+    }
+  };
   webpackConfig.module.rules.push({
     enforce: 'post',
     test: function test(filePath) {
       return /\.css$/.test(filePath) && !/\.module\.css$/.test(filePath);
     },
-    use: extractCSS([{
-      loader: 'css-loader',
-      options: {
-        sourceMap: true,
-        minimize: canCompress
-      }
-    }, {
-      loader: 'postcss-loader',
-      options: postcssOptions
-    }])
+    use: extractCSS([cssLoaderRule, postCSSRule])
   }, {
     test: /\.module\.css$/,
-    use: extractCSS([{
-      loader: 'css-loader',
-      options: {
-        sourceMap: true,
-        modules: true,
-        minimize: canCompress,
-        localIdentName: '[local]___[hash:base62:5]'
-      }
-    }, {
-      loader: 'postcss-loader',
-      options: postcssOptions
-    }])
+    use: extractCSS([cssLoaderRule2, postCSSRule])
+  }, {
+    test: function test(filePath) {
+      return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
+    },
+    use: lessLoaderRule
   }, {
     enforce: 'post',
     test: function test(filePath) {
       return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
     },
-    use: extractCSS([{
-      loader: 'css-loader',
-      options: {
-        sourceMap: true,
-        minimize: canCompress
-      }
-    }, {
-      loader: 'postcss-loader',
-      options: postcssOptions
-    }, {
-      loader: 'less-loader',
-      options: {
-        sourceMap: true
-      }
-    }])
+    use: extractCSS([cssLoaderRule, postCSSRule])
   }, {
     test: /\.module\.less$/,
-    use: extractCSS([{
-      loader: 'css-loader',
-      options: {
-        sourceMap: true,
-        modules: true,
-        minimize: canCompress,
-        localIdentName: '[local]___[hash:base62:5]'
-      }
-    }, {
-      loader: 'postcss-loader',
-      options: postcssOptions
-    }, {
-      loader: 'less-loader',
-      options: {
-        sourceMap: true
-      }
-    }])
+    use: extractCSS([cssLoaderRule2, postCSSRule, lessLoaderRule])
   });
 }
 
@@ -117,7 +98,12 @@ function injectVueTplOptions(webpackConfig, args) {
   var babelOptions = webpackConfig.options.babel;
   webpackConfig.module.rules.push({
     test: /\.vue.tpl$/,
-    loader: 'vue-tpl-loader'
+    loader: 'vue-tpl-loader',
+    options: {
+      transformToRequire: {
+        img: 'src'
+      }
+    }
   });
 }
 

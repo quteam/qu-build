@@ -42,86 +42,57 @@ function injectPostcssOptions(webpackConfig, args) {
   //   theme = pkg.theme;
   // }
 
+  const cssLoaderRule = {
+    loader: 'css-loader',
+    options: {
+      sourceMap: true,
+      minimize: canCompress,
+    },
+  };
+  const cssLoaderRule2 = {
+    loader: 'css-loader',
+    options: {
+      sourceMap: true,
+      modules: true,
+      minimize: canCompress,
+      localIdentName: '[local]___[hash:base62:5]',
+    },
+  };
+  const postCSSRule = {
+    loader: 'postcss-loader',
+    options: postcssOptions,
+  };
+  const lessLoaderRule = {
+    loader: 'less-loader',
+    options: {
+      sourceMap: true,
+      // modifyVars: theme,
+    },
+  };
+
   webpackConfig.module.rules.push({
-    enforce: 'post',
+    enforce: 'post', // vue-template-loader scoped
     test(filePath) {
       return /\.css$/.test(filePath) && !/\.module\.css$/.test(filePath);
     },
-    use: extractCSS([{
-        loader: 'css-loader',
-        options: {
-          sourceMap: true,
-          minimize: canCompress,
-        },
-      },
-      {
-        loader: 'postcss-loader',
-        options: postcssOptions,
-      },
-    ]),
+    use: extractCSS([cssLoaderRule, postCSSRule]),
   }, {
     test: /\.module\.css$/,
-    use: extractCSS([{
-        loader: 'css-loader',
-        options: {
-          sourceMap: true,
-          modules: true,
-          minimize: canCompress,
-          localIdentName: '[local]___[hash:base62:5]',
-        },
-      },
-      {
-        loader: 'postcss-loader',
-        options: postcssOptions,
-      },
-    ]),
+    use: extractCSS([cssLoaderRule2, postCSSRule]),
   }, {
-    enforce: 'post',
     test(filePath) {
       return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
     },
-    use: extractCSS([{
-        loader: 'css-loader',
-        options: {
-          sourceMap: true,
-          minimize: canCompress,
-        },
-      },
-      {
-        loader: 'postcss-loader',
-        options: postcssOptions,
-      },
-      {
-        loader: 'less-loader',
-        options: {
-          sourceMap: true,
-          // modifyVars: theme,
-        },
-      },
-    ]),
+    use: lessLoaderRule,
+  }, {
+    enforce: 'post', // vue-tpl-loader scoped
+    test(filePath) {
+      return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
+    },
+    use: extractCSS([cssLoaderRule, postCSSRule]),
   }, {
     test: /\.module\.less$/,
-    use: extractCSS([{
-        loader: 'css-loader',
-        options: {
-          sourceMap: true,
-          modules: true,
-          minimize: canCompress,
-          localIdentName: '[local]___[hash:base62:5]',
-        },
-      },
-      {
-        loader: 'postcss-loader',
-        options: postcssOptions,
-      },
-      {
-        loader: 'less-loader',
-        options: {
-          sourceMap: true,
-          // modifyVars: theme,
-        },
-      },
-    ]),
+    use: extractCSS([cssLoaderRule2, postCSSRule, lessLoaderRule]),
   });
 }
 
@@ -163,6 +134,13 @@ function injectVueTplOptions(webpackConfig, args) {
   webpackConfig.module.rules.push({
     test: /\.vue.tpl$/,
     loader: 'vue-tpl-loader',
+    options: {
+      transformToRequire: {
+        // The key should be an element name
+        // The value should be an attribute name or an array of attribute names
+        img: 'src',
+      },
+    },
   });
 }
 

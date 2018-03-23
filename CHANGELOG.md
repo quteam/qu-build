@@ -1,5 +1,8 @@
 # Changelog List
 
+## 1.4.6
+- 优化 less scoped
+
 ## 1.4.4
 - 升级依赖版本
 
