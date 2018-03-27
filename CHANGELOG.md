@@ -1,4 +1,6 @@
 # Changelog List
+## 1.4.7
+- 更新 JS 压缩
 
 ## 1.4.6
 - 优化 less scoped

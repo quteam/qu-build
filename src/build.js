@@ -14,6 +14,7 @@ import chalk from 'chalk';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import mergeCustomConfig from './merge-custom-config';
 import getWebpackCommonConfig from './get-webpack-common-config';
 import injectLoaderOptions from './inject-loader-options';
@@ -53,16 +54,26 @@ function getWebpackConfig(args = {
   // Watch mode and Develop mode should not use UglifyJsPlugin
   if (args.compress && !args.dev && !args.watch) {
     webpackConfig.plugins = [...webpackConfig.plugins,
-      new webpack.optimize.UglifyJsPlugin({
+      new UglifyJsPlugin({
         parallel: true,
-        output: {
-          comments: false,
-          ascii_only: true,
-        },
-        compress: {
-          warnings: false,
+        uglifyOptions: {
+          output: {
+            comments: false,
+            beautify: false,
+            ascii_only: true,
+          },
         },
       }),
+      // new webpack.optimize.UglifyJsPlugin({
+      //   parallel: true,
+      //   output: {
+      //     comments: false,
+      //     ascii_only: true,
+      //   },
+      //   compress: {
+      //     warnings: false,
+      //   },
+      // }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
       }),

@@ -1,6 +1,6 @@
 {
   "name": "qu-build",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Build tools for FE",
   "bin": {
     "qu-build": "./bin/build",
@@ -97,6 +97,7 @@
     "sw-precache-webpack-plugin": "^0.11.4",
     "ts-loader": "^4.1.0",
     "typescript": "^2.7.2",
+    "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^1.0.1",
     "vue": "^2.5.16",
     "vue-template-compiler": "^2.5.16",

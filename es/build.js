@@ -25,6 +25,7 @@ import chalk from 'chalk';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import mergeCustomConfig from './merge-custom-config';
 import getWebpackCommonConfig from './get-webpack-common-config';
 import injectLoaderOptions from './inject-loader-options';
@@ -63,14 +64,14 @@ function getWebpackConfig() {
   }
 
   if (args.compress && !args.dev && !args.watch) {
-    webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new webpack.optimize.UglifyJsPlugin({
+    webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new UglifyJsPlugin({
       parallel: true,
-      output: {
-        comments: false,
-        ascii_only: true
-      },
-      compress: {
-        warnings: false
+      uglifyOptions: {
+        output: {
+          comments: false,
+          beautify: false,
+          ascii_only: true
+        }
       }
     }), new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
