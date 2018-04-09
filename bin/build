@@ -10,9 +10,10 @@ const jest = require('jest');
 const program = require('commander');
 // const chalk = require('chalk');
 const build = require('../lib/build');
+const buildInit = interopRequireDefault(require('../lib/build-init')).default;
+const createComponent = interopRequireDefault(require('../lib/create-component')).default;
 
 const _build = interopRequireDefault(build).default;
-let isCMD = false;
 
 program
   .version(require('../package').version, '-v, --version')
@@ -22,6 +23,7 @@ program
   .option('-p, --port [port]', 'develop server port, default is 8080')
   .option('-b, --build', 'build this project')
   .option('-t, --test', 'test this project, use jest')
+  .option('-c, --component <component>', 'quickly create components')
   .option('--pwa', 'use pwa')
   .option('--hash', 'build with hash and output map.json')
   .option('--publicPath <publicPath>', 'publicPath for webpack')
@@ -29,24 +31,23 @@ program
   .option('--config <path>', 'custom config path, default is webpack.config.js')
   .option('--no-compress', 'build without compress')
   .option('--json', 'running webpack with --json, ex. result.json')
-  .option('--verbose', 'run with more logging messages.');
-
-program
-  .command('init', 'generate a new project from a template.')
-  .action((cmd) => {
-    isCMD = true;
-    // if (!/^help|init$/g.test(cmd)) {
-    //   process.exit();
-    // }
-  });
+  .option('--verbose', 'run with more logging messages.')
+  .option('--init <template> <project>', 'generate a new project from a template. template: [vue, pages]');
 
 program.parse(process.argv);
+program.cwd = process.cwd();
 
-if (isCMD) {
+// 快速创建组件
+if (program.component) {
+  createComponent(program);
   return;
 }
 
-program.cwd = process.cwd();
+// 模版初始化
+if (program.init) {
+  buildInit(program);
+  return;
+}
 
 if (program.watch) {
   _build(program);
