@@ -1,4 +1,8 @@
 # Changelog List
+## 1.5.0
+- 修改 `build-init` 命令为 `build --init`
+- 添加 `-c, --component` 命令，快速创建组件结构
+
 ## 1.4.7
 - 更新 JS 压缩
 

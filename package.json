@@ -1,10 +1,9 @@
 {
   "name": "qu-build",
-  "version": "1.4.7",
+  "version": "1.5.1",
   "description": "Build tools for FE",
   "bin": {
-    "qu-build": "./bin/build",
-    "qu-build-init": "./bin/build-init"
+    "qu-build": "./bin/build"
   },
   "main": "lib/build.js",
   "module": "es/build.js",
