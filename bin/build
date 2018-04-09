@@ -49,15 +49,26 @@ if (program.init) {
   return;
 }
 
+// watch 模式
 if (program.watch) {
   _build(program);
-} else if (program.test) {
+  return;
+}
+
+// 测试模式
+if (program.test) {
   jest.run();
-} else {
+  return;
+}
+
+// 开发/生产模式
+if (program.dev || program.build) {
   _build(program, (err) => {
     if (err) {
       process.exit(1);
     }
     process.exit(0);
   });
+} else {
+  console.error('output usage information: qu-build -h');
 }
