@@ -60,6 +60,7 @@
     "@babel/preset-react": "^7.0.0-beta.42",
     "@babel/preset-stage-0": "^7.0.0-beta.42",
     "@babel/runtime": "^7.0.0-beta.42",
+    "ajv": "^6.4.0",
     "autoprefixer": "^8.2.0",
     "babel-loader": "^8.0.0-beta.0",
     "better-npm-run": "^0.1.0",
