@@ -3,8 +3,7 @@
   "version": "1.5.0",
   "description": "Build tools for FE",
   "bin": {
-    "qu-build": "./bin/build",
-    "qu-build-init": "./bin/build-init"
+    "qu-build": "./bin/build"
   },
   "main": "lib/build.js",
   "module": "es/build.js",
