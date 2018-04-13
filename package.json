@@ -1,6 +1,6 @@
 {
   "name": "qu-build",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "Build tools for FE",
   "bin": {
     "qu-build": "./bin/build"
@@ -11,7 +11,10 @@
     "bin",
     "es",
     "lib",
-    "template"
+    "template",
+    "jest.config.js",
+    "jest.transform.js",
+    "tsconfig.jest.json"
   ],
   "scripts": {
     "clean": "rimraf dist lib es",
