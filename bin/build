@@ -57,7 +57,7 @@ if (program.watch) {
 
 // 测试模式
 if (program.test) {
-  jest.run();
+  jest.run(`--config ${__dirname}/../jest.config.js --no-cache`);
   return;
 }
 
