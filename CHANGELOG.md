@@ -1,4 +1,7 @@
 # Changelog List
+## 1.5.8
+- 更新 vue-tpl-loader
+
 ## 1.5.6
 - 修复 es6 单元测试
 
