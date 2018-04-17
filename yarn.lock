@@ -8663,9 +8663,9 @@ vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
 
-vue-tpl-loader@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/vue-tpl-loader/-/vue-tpl-loader-0.4.2.tgz#b2b1c6502e7cc1da1795fb9b6f08e7ffc80c1ef4"
+vue-tpl-loader@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/vue-tpl-loader/-/vue-tpl-loader-0.4.3.tgz#6e713085070e4b3950ca09135aba96544e65b108"
   dependencies:
     hash-sum "^1.0.2"
     loader-utils "^1.1.0"
