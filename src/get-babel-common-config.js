@@ -23,7 +23,13 @@ export default function babel(args) {
   return {
     cacheDirectory: tmpdir(),
     presets: [
-      presetStage0, [
+      [
+        presetStage0,
+        {
+          decoratorsLegacy: true,
+        },
+      ],
+      [
         presetEnv,
         {
           targets: {

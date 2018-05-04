@@ -1,6 +1,12 @@
 {
   "presets": [
-    "@babel/preset-stage-0", [
+    [
+      "@babel/preset-stage-0",
+      {
+        "decoratorsLegacy": true
+      }
+    ],
+    [
       "@babel/preset-env",
       {
         "modules": false,
@@ -12,7 +18,13 @@
   "env": {
     "commonjs": {
       "presets": [
-        "@babel/preset-stage-0", [
+        [
+          "@babel/preset-stage-0",
+          {
+            "decoratorsLegacy": true
+          }
+        ],
+        [
           "@babel/preset-env",
           {
             "targets": {
@@ -33,7 +45,13 @@
     },
     "es": {
       "presets": [
-        "@babel/preset-stage-0", [
+        [
+          "@babel/preset-stage-0",
+          {
+            "decoratorsLegacy": true
+          }
+        ],
+        [
           "@babel/preset-env",
           {
             "modules": false,
@@ -44,7 +62,13 @@
     },
     "test": {
       "presets": [
-        "@babel/preset-stage-0", [
+        [
+          "@babel/preset-stage-0",
+          {
+            "decoratorsLegacy": true
+          }
+        ],
+        [
           "@babel/preset-env", {
             "useBuiltIns": "usage",
             "loose": true

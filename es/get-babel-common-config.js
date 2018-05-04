@@ -16,7 +16,9 @@ export default function babel(args) {
 
   return {
     cacheDirectory: tmpdir(),
-    presets: [presetStage0, [presetEnv, {
+    presets: [[presetStage0, {
+      decoratorsLegacy: true
+    }], [presetEnv, {
       targets: {
         browsers: browsersObj.browsers
       },
