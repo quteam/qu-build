@@ -1,4 +1,7 @@
 # Changelog List
+## 1.5.10
+- 更新 babel
+
 ## 1.5.9
 - 优化配置，解决 webpackChunkName 注释问题
 
