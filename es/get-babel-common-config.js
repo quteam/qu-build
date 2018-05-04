@@ -24,6 +24,6 @@ export default function babel(args) {
       useBuiltIns: 'usage'
     }], presetReact],
     plugins: [],
-    comments: false
+    comments: true
   };
 }
