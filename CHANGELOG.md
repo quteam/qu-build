@@ -1,4 +1,7 @@
 # Changelog List
+## 1.5.9
+- 优化配置，解决 webpackChunkName 注释问题
+
 ## 1.5.8
 - 更新 vue-tpl-loader
 

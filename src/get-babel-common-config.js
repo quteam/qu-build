@@ -36,6 +36,6 @@ export default function babel(args) {
       presetReact,
     ],
     plugins: [],
-    comments: false,
+    comments: true,
   };
 }
