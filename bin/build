@@ -6,6 +6,7 @@ function interopRequireDefault(obj) {
   };
 }
 
+const path = require('path');
 const jest = require('jest');
 const program = require('commander');
 // const chalk = require('chalk');
@@ -29,13 +30,14 @@ program
   .option('--publicPath <publicPath>', 'publicPath for webpack')
   .option('--devtool <devtool>', 'sourcemap generate method, default is null')
   .option('--config <path>', 'custom config path, default is webpack.config.js')
+  .option('--cwd <path>', 'custom context path')
   .option('--no-compress', 'build without compress')
   .option('--json', 'running webpack with --json, ex. result.json')
   .option('--verbose', 'run with more logging messages.')
   .option('--init <template> <project>', 'generate a new project from a template. template: [vue, pages]');
 
 program.parse(process.argv);
-program.cwd = process.cwd();
+program.cwd = program.cwd ? path.resolve(program.cwd) : process.cwd();
 
 // 快速创建组件
 if (program.component) {
