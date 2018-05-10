@@ -1,4 +1,7 @@
 # Changelog List
+## 1.5.11
+- 加入 `--cwd <path>` 命令参数，可自定义打包目录
+
 ## 1.5.10
 - 更新 babel
 

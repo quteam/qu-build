@@ -83,8 +83,9 @@ export default function getWebpackCommonConfig(args) {
       postcss: postcssOptions,
     },
 
+    context: args.cwd,
     output: {
-      path: pkg.outputPath ? join(process.cwd(), `./${pkg.outputPath}/${pkg.name}/${pkg.version}`) : join(process.cwd(), './dist/'),
+      path: pkg.outputPath ? join(args.cwd, `./${pkg.outputPath}/${pkg.name}/${pkg.version}`) : join(args.cwd, './dist/'),
       filename: jsFileName,
       chunkFilename: jsFileName,
     },
