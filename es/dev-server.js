@@ -20,7 +20,7 @@ export default function devServer(compiler, args) {
   app.use(connectHistoryApiFallback());
   app.use(devMiddleware);
   app.use(hotMiddleware);
-  app.use(express.static('./public'));
+  app.use(express.static(path.resolve("".concat(args.cwd, "/public"))));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
     extended: true
