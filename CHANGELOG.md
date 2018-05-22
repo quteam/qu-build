@@ -1,4 +1,7 @@
 # Changelog List
+## 1.5.13
+- 修复 js sourcemap 问题
+
 ## 1.5.12
 - 修复开发模式不能自定义目录
 

@@ -78,7 +78,7 @@ export default function getWebpackCommonConfig(args) {
       filename: jsFileName,
       chunkFilename: jsFileName
     },
-    devtool: args.dev ? 'source-map' : args.devtool,
+    devtool: args.dev || args.sourcemap ? 'source-map' : false,
     resolve: {
       modules: ['./', 'node_modules', resolve(__dirname, '../node_modules')],
       extensions: ['.ts', '.tsx', '.js', '.jsx']

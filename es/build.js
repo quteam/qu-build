@@ -67,6 +67,7 @@ function getWebpackConfig() {
   if (args.compress && !args.dev && !args.watch) {
     webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new UglifyJsPlugin({
       parallel: true,
+      sourceMap: !!args.sourcemap,
       uglifyOptions: {
         output: {
           comments: false,

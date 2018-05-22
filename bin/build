@@ -28,7 +28,7 @@ program
   .option('--pwa', 'use pwa')
   .option('--hash', 'build with hash and output map.json')
   .option('--publicPath <publicPath>', 'publicPath for webpack')
-  .option('--devtool <devtool>', 'sourcemap generate method, default is null')
+  .option('--sourcemap', 'use sourcemap')
   .option('--config <path>', 'custom config path, default is webpack.config.js')
   .option('--cwd <path>', 'custom context path')
   .option('--no-compress', 'build without compress')
