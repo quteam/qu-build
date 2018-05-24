@@ -1,9 +1,7 @@
 // import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import {
-  existsSync,
-} from 'fs';
+import { existsSync } from 'fs';
 import {
   join,
   resolve,
@@ -89,7 +87,7 @@ export default function getWebpackCommonConfig(args) {
       filename: jsFileName,
       chunkFilename: jsFileName,
     },
-    devtool: args.dev ? 'source-map' : args.devtool,
+    devtool: args.dev || args.sourcemap ? 'source-map' : false,
 
     resolve: {
       // css-loader modules is true, less-loader can't found image, so add "./"

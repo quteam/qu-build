@@ -6,9 +6,7 @@ import {
   writeFileSync,
   existsSync,
 } from 'fs';
-import webpack, {
-  ProgressPlugin,
-} from 'webpack';
+import webpack, {ProgressPlugin,} from 'webpack';
 import rimraf from 'rimraf';
 import chalk from 'chalk';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -56,6 +54,7 @@ function getWebpackConfig(args = {
     webpackConfig.plugins = [...webpackConfig.plugins,
       new UglifyJsPlugin({
         parallel: true,
+        sourceMap: !!args.sourcemap,
         uglifyOptions: {
           output: {
             comments: false,
