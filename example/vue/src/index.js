@@ -6,7 +6,7 @@ const vm = new Vue({
   data() {
     return {
       message: 'hello',
-    }
+    };
   },
   ...app,
 });

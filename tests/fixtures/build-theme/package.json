@@ -1,6 +1,0 @@
-{
-  "entry": {
-    "index": "./"
-  },
-  "theme": "./antui-config.js"
-}

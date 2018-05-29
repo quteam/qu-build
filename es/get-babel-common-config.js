@@ -5,6 +5,7 @@ import presetStage0 from '@babel/preset-stage-0';
 import presetEnv from '@babel/preset-env';
 import presetReact from '@babel/preset-react';
 import transformRuntime from '@babel/plugin-transform-runtime';
+import transformClasses from '@babel/plugin-proposal-class-properties';
 export default function babel(args) {
   var pkgPath = join(args.cwd, 'package.json');
   var pkg = existsSync(pkgPath) ? require(pkgPath) : {};
@@ -25,7 +26,9 @@ export default function babel(args) {
       modules: false,
       useBuiltIns: 'usage'
     }], presetReact],
-    plugins: [],
+    plugins: [[transformClasses, {
+      loose: true
+    }]],
     comments: true
   };
 }

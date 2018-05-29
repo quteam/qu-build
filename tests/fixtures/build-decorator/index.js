@@ -1,9 +1,9 @@
 
 const calls = [];
 
-function dec(id){
+function dec(id) {
   calls.push(id);
-  return function(){};
+  return function() {};
 }
 
 @dec(1)

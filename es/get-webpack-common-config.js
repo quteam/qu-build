@@ -1,5 +1,8 @@
 import "core-js/modules/es6.array.for-each";
 import "core-js/modules/es6.array.filter";
+import "core-js/modules/es6.array.iterator";
+import "core-js/modules/es6.object.keys";
+import "core-js/modules/es6.object.define-property";
 import "core-js/modules/es7.symbol.async-iterator";
 import "core-js/modules/es6.symbol";
 import "core-js/modules/web.dom.iterable";
@@ -20,12 +23,10 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 import autoprefixer from 'autoprefixer';
-import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import ImageminPlugin from 'imagemin-webpack-plugin';
 import getBabelCommonConfig from './get-babel-common-config';
 export default function getWebpackCommonConfig(args) {
@@ -72,6 +73,8 @@ export default function getWebpackCommonConfig(args) {
       babel: babelOptions,
       postcss: postcssOptions
     },
+    mode: args.dev ? 'development' : 'production',
+    stats: 'errors-only',
     context: args.cwd,
     output: {
       path: pkg.outputPath ? join(args.cwd, "./".concat(pkg.outputPath, "/").concat(pkg.name, "/").concat(pkg.version)) : join(args.cwd, './dist/'),
@@ -79,6 +82,11 @@ export default function getWebpackCommonConfig(args) {
       chunkFilename: jsFileName
     },
     devtool: args.dev || args.sourcemap ? 'source-map' : false,
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      }
+    },
     resolve: {
       modules: ['./', 'node_modules', resolve(__dirname, '../node_modules')],
       extensions: ['.ts', '.tsx', '.js', '.jsx']
@@ -141,21 +149,9 @@ export default function getWebpackCommonConfig(args) {
         loader: 'raw-loader'
       }]
     },
-    plugins: [new ExtractTextPlugin({
+    plugins: [new MiniCssExtractPlugin({
       filename: cssFileName,
-      disable: !!args.dev,
-      allChunks: true
-    }), new CaseSensitivePathsPlugin(), new FriendlyErrorsWebpackPlugin({
-      onErrors: function onErrors(severity, errors) {
-        if (silent) return;
-
-        if (severity !== 'error') {
-          return;
-        }
-
-        var error = errors[0];
-        console.error("".concat(severity, " : ").concat(error.name));
-      }
+      chunkFilename: cssFileName
     }), new ImageminPlugin({
       disable: !!args.dev,
       pngquant: {

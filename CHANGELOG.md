@@ -1,4 +1,7 @@
 # Changelog List
+## 2.0.0-beta.0
+- 更新 webpack 4
+
 ## 1.5.14
 - 更新 vue-tpl-loader，解决 build 警告问题
 

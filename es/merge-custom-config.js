@@ -1,4 +1,7 @@
+import "core-js/modules/es6.string.iterator";
 import "core-js/modules/es6.array.from";
+import "core-js/modules/es6.regexp.to-string";
+import "core-js/modules/es6.date.to-string";
 import "core-js/modules/es7.symbol.async-iterator";
 import "core-js/modules/es6.symbol";
 import "core-js/modules/web.dom.iterable";

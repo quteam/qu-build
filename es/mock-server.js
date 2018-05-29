@@ -1,3 +1,6 @@
+import "core-js/modules/web.dom.iterable";
+import "core-js/modules/es6.array.iterator";
+import "core-js/modules/es6.object.keys";
 import "core-js/modules/es6.array.sort";
 import "core-js/modules/es6.regexp.split";
 import "core-js/modules/es6.array.index-of";

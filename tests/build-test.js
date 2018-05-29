@@ -1,9 +1,5 @@
-import {
-  join,
-} from 'path';
-import {
-  readFileSync,
-} from 'fs';
+import { join } from 'path';
+import { readFileSync } from 'fs';
 import glob from 'glob';
 import expect from 'expect';
 import build from '../src/build';
@@ -30,7 +26,6 @@ function testBuild(args, fixture) {
 
     const defaultConfig = {
       cwd,
-      compress: false,
     };
 
     build({
@@ -69,14 +64,12 @@ describe('lib/build', () => {
   // it('should support config', () => testBuild({
   //   config: 'webpack.config.path.js',
   // }, 'build-mergeCustomConfig-path'));
-  it('should support dedupe', () => testBuild({}, 'build-dedupePlugin-enabled'));
   it('should support hash map', () => testBuild({
     hash: true,
   }, 'build-hash-map'));
   it('should support decorator', () => testBuild({}, 'build-decorator'));
   it('should support es3', () => testBuild({}, 'build-es3'));
   it('should support typescript', () => testBuild({}, 'build-typescript'));
-  it('should support theme', () => testBuild({}, 'build-theme'));
   it('should support font', () => testBuild({}, 'build-font'));
   it('should support autoprefix', () => testBuild({}, 'build-autoprefix'));
   it('should support common', () => testBuild({}, 'build-common'));
