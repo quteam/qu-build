@@ -9,7 +9,7 @@ export default function devServer(compiler, args) {
   var port = args.port || 8080;
   var app = express();
   var devMiddleware = webpackDevMiddleware(compiler, {
-    quiet: true
+    logLevel: args.verbose ? 'info' : 'error'
   });
   var hotMiddleware = webpackHotMiddleware(compiler, {
     log: function log() {}

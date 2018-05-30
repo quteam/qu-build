@@ -29,6 +29,7 @@ import { join, resolve } from 'path';
 import autoprefixer from 'autoprefixer';
 import ImageminPlugin from 'imagemin-webpack-plugin';
 import getBabelCommonConfig from './get-babel-common-config';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 export default function getWebpackCommonConfig(args) {
   var pkgPath = join(args.cwd, 'package.json');
   var pkg = existsSync(pkgPath) ? require(pkgPath) : {};
@@ -74,7 +75,6 @@ export default function getWebpackCommonConfig(args) {
       postcss: postcssOptions
     },
     mode: args.dev ? 'development' : 'production',
-    stats: 'errors-only',
     context: args.cwd,
     output: {
       path: pkg.outputPath ? join(args.cwd, "./".concat(pkg.outputPath, "/").concat(pkg.name, "/").concat(pkg.version)) : join(args.cwd, './dist/'),
@@ -152,6 +152,17 @@ export default function getWebpackCommonConfig(args) {
     plugins: [new MiniCssExtractPlugin({
       filename: cssFileName,
       chunkFilename: cssFileName
+    }), new FriendlyErrorsWebpackPlugin({
+      onErrors: function onErrors(severity, errors) {
+        if (silent) return;
+
+        if (severity !== 'error') {
+          return;
+        }
+
+        var error = errors[0];
+        console.error("".concat(severity, " : ").concat(error.name));
+      }
     }), new ImageminPlugin({
       disable: !!args.dev,
       pngquant: {

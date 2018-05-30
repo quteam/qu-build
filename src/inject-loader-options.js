@@ -5,7 +5,9 @@ const tsQuery = getTSCommonConfig();
 
 function injectPostcssOptions(webpackConfig, args) {
   function extractCSS(_opts) {
-    _opts.unshift(MiniCssExtractPlugin.loader);
+    if (!args.dev) {
+      _opts.unshift(MiniCssExtractPlugin.loader);
+    }
     _opts.unshift('style-loader');
     return _opts;
   }
@@ -65,23 +67,23 @@ function injectPostcssOptions(webpackConfig, args) {
     },
     use: extractCSS([cssLoaderRule, postCSSRule]),
   }, {
-    test: /\.module\.css$/,
-    use: extractCSS([cssLoaderRule2, postCSSRule]),
-  }, {
-    test(filePath) {
-      return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
-    },
-    use: lessLoaderRule,
-  }, {
-    enforce: 'post', // vue-tpl-loader scoped
-    test(filePath) {
-      return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
-    },
-    use: extractCSS([cssLoaderRule, postCSSRule]),
-  }, {
-    test: /\.module\.less$/,
-    use: extractCSS([cssLoaderRule2, postCSSRule, lessLoaderRule]),
-  });
+      test: /\.module\.css$/,
+      use: extractCSS([cssLoaderRule2, postCSSRule]),
+    }, {
+      test(filePath) {
+        return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
+      },
+      use: lessLoaderRule,
+    }, {
+      enforce: 'post', // vue-tpl-loader scoped
+      test(filePath) {
+        return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
+      },
+      use: extractCSS([cssLoaderRule, postCSSRule]),
+    }, {
+      test: /\.module\.less$/,
+      use: extractCSS([cssLoaderRule2, postCSSRule, lessLoaderRule]),
+    });
 }
 
 function injectBabelOptions(webpackConfig) {
@@ -94,8 +96,8 @@ function injectBabelOptions(webpackConfig) {
     loader: 'babel-loader',
     options: babelOptions,
   }, {
-    test: /\.tsx?$/,
-    use: [{
+      test: /\.tsx?$/,
+      use: [{
         loader: 'babel-loader',
         options: babelOptions,
       },
@@ -106,8 +108,8 @@ function injectBabelOptions(webpackConfig) {
           compilerOptions: tsQuery,
         },
       },
-    ],
-  });
+      ],
+    });
 }
 
 // vue 模版文件预处理

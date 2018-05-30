@@ -12,10 +12,10 @@ export default function devServer(compiler, args) {
   const app = express();
 
   const devMiddleware = webpackDevMiddleware(compiler, {
-    quiet: true,
+    logLevel: args.verbose ? 'info' : 'error',
   });
   const hotMiddleware = webpackHotMiddleware(compiler, {
-    log: () => {},
+    log: () => { },
   });
 
   devMiddleware.waitUntilValid(() => {

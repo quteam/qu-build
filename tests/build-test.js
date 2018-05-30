@@ -68,7 +68,6 @@ describe('lib/build', () => {
     hash: true,
   }, 'build-hash-map'));
   it('should support decorator', () => testBuild({}, 'build-decorator'));
-  it('should support es3', () => testBuild({}, 'build-es3'));
   it('should support typescript', () => testBuild({}, 'build-typescript'));
   it('should support font', () => testBuild({}, 'build-font'));
   it('should support autoprefix', () => testBuild({}, 'build-autoprefix'));

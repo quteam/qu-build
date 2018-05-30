@@ -1,4 +1,8 @@
 # Changelog List
+## 2.0.0-beta.1
+- 修复 api mock数据
+- 优化提示
+
 ## 2.0.0-beta.0
 - 更新 webpack 4
 

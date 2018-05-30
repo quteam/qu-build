@@ -270,7 +270,7 @@
     "@babel/helper-remap-async-to-generator" "7.0.0-beta.49"
     "@babel/plugin-syntax-async-generators" "7.0.0-beta.49"
 
-"@babel/plugin-proposal-class-properties@7.0.0-beta.49", "@babel/plugin-proposal-class-properties@^7.0.0-beta.49":
+"@babel/plugin-proposal-class-properties@7.0.0-beta.49":
   version "7.0.0-beta.49"
   resolved "http://r.cnpmjs.org/@babel/plugin-proposal-class-properties/download/@babel/plugin-proposal-class-properties-7.0.0-beta.49.tgz#527e90af75d23fd5e3bae1a218dc0a6d9236b5f1"
   dependencies:
@@ -3741,9 +3741,9 @@ fresh@0.5.2:
   version "0.5.2"
   resolved "http://r.cnpmjs.org/fresh/download/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
 
-friendly-errors-webpack-plugin@^1.6.1:
+friendly-errors-webpack-plugin@^1.7.0:
   version "1.7.0"
-  resolved "http://r.cnpmjs.org/friendly-errors-webpack-plugin/download/friendly-errors-webpack-plugin-1.7.0.tgz#efc86cbb816224565861a1be7a9d84d0aafea136"
+  resolved "https://registry.yarnpkg.com/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.7.0.tgz#efc86cbb816224565861a1be7a9d84d0aafea136"
   dependencies:
     chalk "^1.1.3"
     error-stack-parser "^2.0.0"
@@ -6069,10 +6069,6 @@ node-pre-gyp@^0.10.0:
 node-status-codes@^1.0.0:
   version "1.0.0"
   resolved "http://r.cnpmjs.org/node-status-codes/download/node-status-codes-1.0.0.tgz#5ae5541d024645d32a58fcddc9ceecea7ae3ac2f"
-
-node-walkdir@^1.0.0:
-  version "1.0.0"
-  resolved "http://r.cnpmjs.org/node-walkdir/download/node-walkdir-1.0.0.tgz#8cf60c4822eb6bc5785b1beb52c11e64cda0e7ed"
 
 nopt@^4.0.1:
   version "4.0.1"

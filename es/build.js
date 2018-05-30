@@ -168,8 +168,6 @@ export default function build(args, callback) {
         stream.clearLine(1);
       } else if (percentage === 1) {
         stream.cursorTo(0);
-        stream.write('Bundle build is now finished.\n');
-        stream.clearLine(1);
       }
     }));
   });

@@ -4,7 +4,9 @@ var tsQuery = getTSCommonConfig();
 
 function injectPostcssOptions(webpackConfig, args) {
   function extractCSS(_opts) {
-    _opts.unshift(MiniCssExtractPlugin.loader);
+    if (!args.dev) {
+      _opts.unshift(MiniCssExtractPlugin.loader);
+    }
 
     _opts.unshift('style-loader');
 

@@ -1,9 +1,6 @@
 import fs from 'fs';
-// import path from 'path';
-import Mock, {
-  Random,
-} from 'mockjs';
-import walkdir from 'node-walkdir';
+import { resolve } from 'path';
+import Mock, { Random } from 'mockjs';
 
 // const Random = Mock.Random;
 
@@ -17,48 +14,53 @@ function mock(_opts) {
   _opts.modules.map((_dir) => {
     fs.exists(_dir, (exists) => {
       if (exists) {
-        walkdir(_dir, /\.js(on)?$/i, (filepath) => {
-          const content = String(fs.readFileSync(filepath, 'utf8')).trim() || '{}';
+        fs.readdir(_dir, (err, files) => {
+          files.map((file) => {
+            if (/\.js(on)?$/i.test(file)) {
+              const filepath = resolve(_dir, file);
+              const content = String(fs.readFileSync(filepath, 'utf8')).trim() || '{}';
 
-          let url = filepath;
-          let describe = 'no description';
+              let url = filepath;
+              let describe = 'no description';
 
-          const m = content.match(RE);
+              const m = content.match(RE);
 
-          if (m) {
-            url = m[2].trim();
-            describe = m[1].replace(/(^[\s*]+|[\s*]+$)/g, '');
-          }
+              if (m) {
+                url = m[2].trim();
+                describe = m[1].replace(/(^[\s*]+|[\s*]+$)/g, '');
+              }
 
-          if (url[0] !== '/') { // fix url path
-            url = `/${url}`;
-          }
+              if (url[0] !== '/') { // fix url path
+                url = `/${url}`;
+              }
 
-          let pathname = url;
-          if (pathname.indexOf('?') > -1) {
-            pathname = pathname.split('?')[0];
-          }
+              let pathname = url;
+              if (pathname.indexOf('?') > -1) {
+                pathname = pathname.split('?')[0];
+              }
 
-          if (mock.debug && routes[pathname]) {
-            console.warn(`[Mock Warn]: [${filepath}: ${pathname}] already exists and has been covered with new data.`);
-          }
+              if (mock.debug && routes[pathname]) {
+                console.warn(`[Mock Warn]: [${filepath}: ${pathname}] already exists and has been covered with new data.`);
+              }
 
-          routes[pathname] = {
-            url,
-            filepath,
-            describe,
-          };
+              routes[pathname] = {
+                url,
+                filepath,
+                describe,
+              };
 
-          if (/\.js$/.test(filepath)) {
-            routes[pathname].data = require(filepath);
-          } else {
-            try {
-              routes[pathname].data = new Function(`return (${content})`)();
-            } catch (e) {
-              delete routes[pathname];
-              mock.debug && console.warn('[Mock Warn]:', e);
+              if (/\.js$/.test(filepath)) {
+                routes[pathname].data = require(filepath);
+              } else {
+                try {
+                  routes[pathname].data = new Function(`return (${content})`)();
+                } catch (e) {
+                  delete routes[pathname];
+                  mock.debug && console.warn('[Mock Warn]:', e);
+                }
+              }
             }
-          }
+          });
         });
       }
     });
@@ -103,7 +105,6 @@ function mock(_opts) {
       } else {
         res.json(_mockData);
       }
-
     } else {
       next();
     }

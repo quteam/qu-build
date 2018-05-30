@@ -8,6 +8,7 @@ import {
 import autoprefixer from 'autoprefixer';
 import ImageminPlugin from 'imagemin-webpack-plugin';
 import getBabelCommonConfig from './get-babel-common-config';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 
 export default function getWebpackCommonConfig(args) {
   const pkgPath = join(args.cwd, 'package.json');
@@ -79,7 +80,6 @@ export default function getWebpackCommonConfig(args) {
     },
 
     mode: args.dev ? 'development' : 'production',
-    stats: 'errors-only',
     context: args.cwd,
     output: {
       path: pkg.outputPath ? join(args.cwd, `./${pkg.outputPath}/${pkg.name}/${pkg.version}`) : join(args.cwd, './dist/'),
@@ -170,7 +170,16 @@ export default function getWebpackCommonConfig(args) {
         filename: cssFileName,
         chunkFilename: cssFileName,
       }),
-      // new CaseSensitivePathsPlugin(),
+      new FriendlyErrorsWebpackPlugin({
+        onErrors: (severity, errors) => {
+          if (silent) return;
+          if (severity !== 'error') {
+            return;
+          }
+          const error = errors[0];
+          console.error(`${severity} : ${error.name}`);
+        },
+      }),
       new ImageminPlugin({
         disable: !!args.dev,
         pngquant: {
@@ -180,11 +189,6 @@ export default function getWebpackCommonConfig(args) {
           progressive: true,
         },
       }),
-      // new HtmlWebpackPlugin({
-      //   // filename: 'index.html',
-      //   template: 'src/page.html', // 模板路径
-      //   inject: true, // js插入位置
-      // }),
     ],
   };
 
