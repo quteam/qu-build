@@ -6,7 +6,6 @@ import {
   resolve,
 } from 'path';
 import autoprefixer from 'autoprefixer';
-import ImageminPlugin from 'imagemin-webpack-plugin';
 import getBabelCommonConfig from './get-babel-common-config';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 
@@ -141,22 +140,40 @@ export default function getWebpackCommonConfig(args) {
           minetype: 'application/vnd.ms-fontobject',
         },
       },
+      // {
+      //   test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+      //   loader: 'url-loader',
+      //   options: {
+      //     name: 'img/[name]-[hash:5].[ext]',
+      //     limit: 8192,
+      //     minetype: 'image/svg+xml',
+      //   },
+      // },
+      // {
+      //   test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
+      //   loader: 'url-loader',
+      //   options: {
+      //     name: 'img/[name]-[hash:5].[ext]',
+      //     limit: 8192,
+      //   },
+      // },
       {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'img/[name]-[hash:5].[ext]',
-          limit: 8192,
-          minetype: 'image/svg+xml',
-        },
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
-        loader: 'url-loader',
-        options: {
-          name: 'img/[name]-[hash:5].[ext]',
-          limit: 8192,
-        },
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              name: 'img/[name]-[hash:5].[ext]',
+              limit: 8192,
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+            },
+          },
+        ],
       },
       {
         test: /\.module\.(html|htm|txt|tpl)$/,
@@ -178,15 +195,6 @@ export default function getWebpackCommonConfig(args) {
           }
           const error = errors[0];
           console.error(`${severity} : ${error.name}`);
-        },
-      }),
-      new ImageminPlugin({
-        disable: !!args.dev,
-        pngquant: {
-          quality: '95-100',
-        },
-        jpegtran: {
-          progressive: true,
         },
       }),
     ],
