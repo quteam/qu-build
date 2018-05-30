@@ -162,7 +162,7 @@ export default function build(args, callback) {
     config.plugins.push(new ProgressPlugin(function (percentage, msg, addInfo) {
       var stream = process.stderr;
 
-      if (stream.isTTY && percentage < 1) {
+      if (stream.isTTY && percentage < 0.7) {
         stream.cursorTo(0);
         stream.write("".concat(chalk.magenta(msg), " (").concat(chalk.magenta(addInfo), ")"));
         stream.clearLine(1);
@@ -207,9 +207,7 @@ export default function build(args, callback) {
         console.error(buildInfo);
       } else if (args.verbose) {
         console.log(buildInfo);
-      } else {
-        process.stderr.write('Build finished.\n');
-      }
+      } else {}
     }
 
     if (callback) {

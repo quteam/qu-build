@@ -174,7 +174,7 @@ export default function build(args, callback) {
   webpackConfig.forEach((config) => {
     config.plugins.push(new ProgressPlugin((percentage, msg, addInfo) => {
       const stream = process.stderr;
-      if (stream.isTTY && percentage < 1) {
+      if (stream.isTTY && percentage < 0.7) {
         stream.cursorTo(0);
         stream.write(`${chalk.magenta(msg)} (${chalk.magenta(addInfo)})`);
         stream.clearLine(1);
@@ -219,7 +219,7 @@ export default function build(args, callback) {
       } else if (args.verbose) {
         console.log(buildInfo);
       } else {
-        process.stderr.write('Build finished.\n');
+        // process.stderr.write('Build finished.\n');
       }
     }
 
