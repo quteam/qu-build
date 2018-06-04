@@ -1,14 +1,11 @@
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import getTSCommonConfig from './get-ts-common-config';
 var tsQuery = getTSCommonConfig();
 
 function injectPostcssOptions(webpackConfig, args) {
   function extractCSS(_opts) {
     if (!args.dev) {
-      return ExtractTextPlugin.extract({
-        use: _opts,
-        publicPath: '../'
-      });
+      _opts.unshift(MiniCssExtractPlugin.loader);
     }
 
     _opts.unshift('style-loader');
@@ -16,7 +13,7 @@ function injectPostcssOptions(webpackConfig, args) {
     return _opts;
   }
 
-  var canCompress = args.compress && !args.dev && !args.watch;
+  var canCompress = !args.dev && !args.watch;
   var postcssOptions = webpackConfig.options.postcss;
   var cssLoaderRule = {
     loader: 'css-loader',
@@ -93,7 +90,7 @@ function injectBabelOptions(webpackConfig) {
 }
 
 function injectVueTplOptions(webpackConfig, args) {
-  var canCompress = args.compress && !args.dev && !args.watch;
+  var canCompress = !args.dev && !args.watch;
   var postcssOptions = webpackConfig.options.postcss;
   var babelOptions = webpackConfig.options.babel;
   webpackConfig.module.rules.push({

@@ -27,4 +27,3 @@ const a = new A();
 a.foo();
 A.method('haha');
 
-

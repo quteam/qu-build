@@ -31,8 +31,6 @@ program
   .option('--sourcemap', 'use sourcemap')
   .option('--config <path>', 'custom config path, default is webpack.config.js')
   .option('--cwd <path>', 'custom context path')
-  .option('--no-compress', 'build without compress')
-  .option('--json', 'running webpack with --json, ex. result.json')
   .option('--verbose', 'run with more logging messages.')
   .option('--init <template> <project>', 'generate a new project from a template. template: [vue, pages]');
 

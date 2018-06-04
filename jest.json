@@ -2,7 +2,7 @@
   "testMatch":[
     "**/*-test.js"
   ],
-  "collectCoverage": true,
+  "collectCoverage": false,
   "collectCoverageFrom": ["src/**/*.{js,jsx}"],
   "coverageDirectory": "coverage",
   "moduleFileExtensions": ["js", "json", "jsx"],

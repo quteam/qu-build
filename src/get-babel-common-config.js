@@ -1,16 +1,11 @@
-import {
-  tmpdir,
-} from 'os';
-import {
-  existsSync,
-} from 'fs';
-import {
-  join,
-} from 'path';
+import { tmpdir } from 'os';
+import { existsSync } from 'fs';
+import { join } from 'path';
 import presetStage0 from '@babel/preset-stage-0';
 import presetEnv from '@babel/preset-env';
 import presetReact from '@babel/preset-react';
 import transformRuntime from '@babel/plugin-transform-runtime';
+import transformClasses from '@babel/plugin-proposal-class-properties';
 
 export default function babel(args) {
   const pkgPath = join(args.cwd, 'package.json');
@@ -41,7 +36,11 @@ export default function babel(args) {
       ],
       presetReact,
     ],
-    plugins: [],
+    plugins: [
+      [transformClasses, {
+        loose: true,
+      }],
+    ],
     comments: true,
   };
 }

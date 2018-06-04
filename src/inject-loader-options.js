@@ -1,11 +1,4 @@
-// import {
-//   existsSync,
-// } from 'fs';
-// import {
-//   join,
-//   resolve,
-// } from 'path';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import getTSCommonConfig from './get-ts-common-config';
 
 const tsQuery = getTSCommonConfig();
@@ -13,16 +6,13 @@ const tsQuery = getTSCommonConfig();
 function injectPostcssOptions(webpackConfig, args) {
   function extractCSS(_opts) {
     if (!args.dev) {
-      return ExtractTextPlugin.extract({
-        use: _opts,
-        publicPath: '../',
-      });
+      _opts.unshift(MiniCssExtractPlugin.loader);
     }
     _opts.unshift('style-loader');
     return _opts;
   }
 
-  const canCompress = args.compress && !args.dev && !args.watch;
+  const canCompress = !args.dev && !args.watch;
   const postcssOptions = webpackConfig.options.postcss;
   // delete webpackConfig.postcss; // eslint-disable-line
 
@@ -77,23 +67,23 @@ function injectPostcssOptions(webpackConfig, args) {
     },
     use: extractCSS([cssLoaderRule, postCSSRule]),
   }, {
-    test: /\.module\.css$/,
-    use: extractCSS([cssLoaderRule2, postCSSRule]),
-  }, {
-    test(filePath) {
-      return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
-    },
-    use: lessLoaderRule,
-  }, {
-    enforce: 'post', // vue-tpl-loader scoped
-    test(filePath) {
-      return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
-    },
-    use: extractCSS([cssLoaderRule, postCSSRule]),
-  }, {
-    test: /\.module\.less$/,
-    use: extractCSS([cssLoaderRule2, postCSSRule, lessLoaderRule]),
-  });
+      test: /\.module\.css$/,
+      use: extractCSS([cssLoaderRule2, postCSSRule]),
+    }, {
+      test(filePath) {
+        return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
+      },
+      use: lessLoaderRule,
+    }, {
+      enforce: 'post', // vue-tpl-loader scoped
+      test(filePath) {
+        return /\.less$/.test(filePath) && !/\.module\.less$/.test(filePath);
+      },
+      use: extractCSS([cssLoaderRule, postCSSRule]),
+    }, {
+      test: /\.module\.less$/,
+      use: extractCSS([cssLoaderRule2, postCSSRule, lessLoaderRule]),
+    });
 }
 
 function injectBabelOptions(webpackConfig) {
@@ -106,8 +96,8 @@ function injectBabelOptions(webpackConfig) {
     loader: 'babel-loader',
     options: babelOptions,
   }, {
-    test: /\.tsx?$/,
-    use: [{
+      test: /\.tsx?$/,
+      use: [{
         loader: 'babel-loader',
         options: babelOptions,
       },
@@ -118,18 +108,16 @@ function injectBabelOptions(webpackConfig) {
           compilerOptions: tsQuery,
         },
       },
-    ],
-  });
+      ],
+    });
 }
 
 // vue 模版文件预处理
 function injectVueTplOptions(webpackConfig, args) {
-  const canCompress = args.compress && !args.dev && !args.watch;
+  const canCompress = !args.dev && !args.watch;
   const postcssOptions = webpackConfig.options.postcss;
   const babelOptions = webpackConfig.options.babel;
 
-  // console.log(postcssOptions.plugins[0]);
-  // console.log(babelOptions);
 
   webpackConfig.module.rules.push({
     test: /\.vue.tpl$/,

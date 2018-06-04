@@ -1,3 +1,2 @@
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-export { ExtractTextPlugin, CaseSensitivePathsPlugin };
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+export { MiniCssExtractPlugin };

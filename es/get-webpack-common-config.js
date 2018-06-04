@@ -1,5 +1,8 @@
 import "core-js/modules/es6.array.for-each";
 import "core-js/modules/es6.array.filter";
+import "core-js/modules/es6.array.iterator";
+import "core-js/modules/es6.object.keys";
+import "core-js/modules/es6.object.define-property";
 import "core-js/modules/es7.symbol.async-iterator";
 import "core-js/modules/es6.symbol";
 import "core-js/modules/web.dom.iterable";
@@ -20,14 +23,12 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 import autoprefixer from 'autoprefixer';
-import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-import ImageminPlugin from 'imagemin-webpack-plugin';
 import getBabelCommonConfig from './get-babel-common-config';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 export default function getWebpackCommonConfig(args) {
   var pkgPath = join(args.cwd, 'package.json');
   var pkg = existsSync(pkgPath) ? require(pkgPath) : {};
@@ -72,6 +73,7 @@ export default function getWebpackCommonConfig(args) {
       babel: babelOptions,
       postcss: postcssOptions
     },
+    mode: args.dev ? 'development' : 'production',
     context: args.cwd,
     output: {
       path: pkg.outputPath ? join(args.cwd, "./".concat(pkg.outputPath, "/").concat(pkg.name, "/").concat(pkg.version)) : join(args.cwd, './dist/'),
@@ -79,6 +81,21 @@ export default function getWebpackCommonConfig(args) {
       chunkFilename: jsFileName
     },
     devtool: args.dev || args.sourcemap ? 'source-map' : false,
+    optimization: {
+      splitChunks: {
+        chunks: 'initial',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            name: 'vendor'
+          },
+          common: {
+            name: 'common'
+          }
+        }
+      }
+    },
     resolve: {
       modules: ['./', 'node_modules', resolve(__dirname, '../node_modules')],
       extensions: ['.ts', '.tsx', '.js', '.jsx']
@@ -122,30 +139,28 @@ export default function getWebpackCommonConfig(args) {
           minetype: 'application/vnd.ms-fontobject'
         }
       }, {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'img/[name]-[hash:5].[ext]',
-          limit: 8192,
-          minetype: 'image/svg+xml'
-        }
-      }, {
-        test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
-        loader: 'url-loader',
-        options: {
-          name: 'img/[name]-[hash:5].[ext]',
-          limit: 8192
-        }
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            name: 'img/[name]-[hash:5].[ext]',
+            limit: 8192
+          }
+        }, {
+          loader: 'image-webpack-loader',
+          options: {
+            bypassOnDebug: true
+          }
+        }]
       }, {
         test: /\.module\.(html|htm|txt|tpl)$/,
         loader: 'raw-loader'
       }]
     },
-    plugins: [new ExtractTextPlugin({
+    plugins: [new MiniCssExtractPlugin({
       filename: cssFileName,
-      disable: !!args.dev,
-      allChunks: true
-    }), new CaseSensitivePathsPlugin(), new FriendlyErrorsWebpackPlugin({
+      chunkFilename: cssFileName
+    }), new FriendlyErrorsWebpackPlugin({
       onErrors: function onErrors(severity, errors) {
         if (silent) return;
 
@@ -155,14 +170,6 @@ export default function getWebpackCommonConfig(args) {
 
         var error = errors[0];
         console.error("".concat(severity, " : ").concat(error.name));
-      }
-    }), new ImageminPlugin({
-      disable: !!args.dev,
-      pngquant: {
-        quality: '95-100'
-      },
-      jpegtran: {
-        progressive: true
       }
     })]
   };

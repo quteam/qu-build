@@ -1,16 +1,13 @@
 // import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { existsSync } from 'fs';
 import {
   join,
   resolve,
 } from 'path';
 import autoprefixer from 'autoprefixer';
-import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-// import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ImageminPlugin from 'imagemin-webpack-plugin';
 import getBabelCommonConfig from './get-babel-common-config';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 
 export default function getWebpackCommonConfig(args) {
   const pkgPath = join(args.cwd, 'package.json');
@@ -81,6 +78,7 @@ export default function getWebpackCommonConfig(args) {
       postcss: postcssOptions,
     },
 
+    mode: args.dev ? 'development' : 'production',
     context: args.cwd,
     output: {
       path: pkg.outputPath ? join(args.cwd, `./${pkg.outputPath}/${pkg.name}/${pkg.version}`) : join(args.cwd, './dist/'),
@@ -88,6 +86,22 @@ export default function getWebpackCommonConfig(args) {
       chunkFilename: jsFileName,
     },
     devtool: args.dev || args.sourcemap ? 'source-map' : false,
+
+    optimization: {
+      splitChunks: {
+        chunks: 'initial',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            name: 'vendor',
+          },
+          common: {
+            name: 'common',
+          },
+        },
+      },
+    },
 
     resolve: {
       // css-loader modules is true, less-loader can't found image, so add "./"
@@ -101,76 +115,71 @@ export default function getWebpackCommonConfig(args) {
     node,
     module: {
       rules: [{
-          test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url-loader',
-          options: {
-            name: 'font/[name]-[hash:5].[ext]',
-            limit: 8192,
-            minetype: 'application/font-woff',
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          name: 'font/[name]-[hash:5].[ext]',
+          limit: 8192,
+          minetype: 'application/font-woff',
+        },
+      },
+      {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          name: 'font/[name]-[hash:5].[ext]',
+          limit: 8192,
+          minetype: 'application/font-woff',
+        },
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          name: 'font/[name]-[hash:5].[ext]',
+          limit: 8192,
+          minetype: 'application/octet-stream',
+        },
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          name: 'font/[name]-[hash:5].[ext]',
+          limit: 8192,
+          minetype: 'application/vnd.ms-fontobject',
+        },
+      },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              name: 'img/[name]-[hash:5].[ext]',
+              limit: 8192,
+            },
           },
-        },
-        {
-          test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url-loader',
-          options: {
-            name: 'font/[name]-[hash:5].[ext]',
-            limit: 8192,
-            minetype: 'application/font-woff',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+            },
           },
-        },
-        {
-          test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url-loader',
-          options: {
-            name: 'font/[name]-[hash:5].[ext]',
-            limit: 8192,
-            minetype: 'application/octet-stream',
-          },
-        },
-        {
-          test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url-loader',
-          options: {
-            name: 'font/[name]-[hash:5].[ext]',
-            limit: 8192,
-            minetype: 'application/vnd.ms-fontobject',
-          },
-        },
-        {
-          test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url-loader',
-          options: {
-            name: 'img/[name]-[hash:5].[ext]',
-            limit: 8192,
-            minetype: 'image/svg+xml',
-          },
-        },
-        {
-          test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
-          loader: 'url-loader',
-          options: {
-            name: 'img/[name]-[hash:5].[ext]',
-            limit: 8192,
-          },
-        },
-        {
-          test: /\.module\.(html|htm|txt|tpl)$/,
-          loader: 'raw-loader',
-        },
+        ],
+      },
+      {
+        test: /\.module\.(html|htm|txt|tpl)$/,
+        loader: 'raw-loader',
+      },
       ],
     },
 
     plugins: [
-      // new webpack.optimize.CommonsChunkPlugin({
-      //   name: 'common',
-      //   filename: commonName,
-      // }),
-      new ExtractTextPlugin({
+      new MiniCssExtractPlugin({
         filename: cssFileName,
-        disable: !!args.dev,
-        allChunks: true,
+        chunkFilename: cssFileName,
       }),
-      new CaseSensitivePathsPlugin(),
       new FriendlyErrorsWebpackPlugin({
         onErrors: (severity, errors) => {
           if (silent) return;
@@ -181,20 +190,6 @@ export default function getWebpackCommonConfig(args) {
           console.error(`${severity} : ${error.name}`);
         },
       }),
-      new ImageminPlugin({
-        disable: !!args.dev,
-        pngquant: {
-          quality: '95-100',
-        },
-        jpegtran: {
-          progressive: true,
-        },
-      }),
-      // new HtmlWebpackPlugin({
-      //   // filename: 'index.html',
-      //   template: 'src/page.html', // 模板路径
-      //   inject: true, // js插入位置
-      // }),
     ],
   };
 

@@ -1,12 +1,16 @@
+import "core-js/modules/es6.string.iterator";
 import "core-js/modules/es6.array.from";
 import "core-js/modules/es7.symbol.async-iterator";
 import "core-js/modules/es6.symbol";
-import "core-js/modules/web.dom.iterable";
-import "core-js/modules/es6.array.filter";
+import "core-js/modules/es6.regexp.to-string";
+import "core-js/modules/es6.date.to-string";
+import "core-js/modules/es6.function.name";
 import "core-js/modules/es6.array.for-each";
 import "core-js/modules/es6.object.assign";
 import "core-js/modules/es6.array.map";
-import "core-js/modules/es6.function.name";
+import "core-js/modules/web.dom.iterable";
+import "core-js/modules/es6.array.iterator";
+import "core-js/modules/es6.object.keys";
 import "core-js/modules/es6.array.some";
 import "core-js/modules/es6.array.is-array";
 
@@ -26,7 +30,6 @@ import chalk from 'chalk';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import mergeCustomConfig from './merge-custom-config';
 import getWebpackCommonConfig from './get-webpack-common-config';
 import injectLoaderOptions from './inject-loader-options';
@@ -64,18 +67,8 @@ function getWebpackConfig() {
     webpackConfig.output.publicPath = args.publicPath;
   }
 
-  if (args.compress && !args.dev && !args.watch) {
-    webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new UglifyJsPlugin({
-      parallel: true,
-      sourceMap: !!args.sourcemap,
-      uglifyOptions: {
-        output: {
-          comments: false,
-          beautify: false,
-          ascii_only: true
-        }
-      }
-    }), new webpack.DefinePlugin({
+  if (!args.dev && !args.watch) {
+    webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
     })]);
   } else {
@@ -84,14 +77,7 @@ function getWebpackConfig() {
     })]);
   }
 
-  webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([new webpack.NoEmitOnErrorsPlugin()]);
-
-  if (args.hash) {
-    webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins).concat([require('map-json-webpack-plugin')({
-      assetsPath: pkg.name,
-      cache: cache
-    })]);
-  }
+  webpackConfig.plugins = _toConsumableArray(webpackConfig.plugins);
 
   if (typeof args.config === 'function') {
     webpackConfig = args.config(webpackConfig) || webpackConfig;
@@ -121,19 +107,11 @@ function getWebpackConfig() {
     }
 
     if (entryArr.length > 1) {
-      conf.chunks = ['common', pathname];
+      conf.chunks = ['vendor', 'common', pathname];
     }
 
     webpackConfig.plugins.push(new HtmlWebpackPlugin(conf));
   });
-
-  if (entryArr.length > 1) {
-    webpackConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-      filename: commonName
-    }));
-  }
-
   checkConfig(webpackConfig);
   return webpackConfig;
 }
@@ -184,11 +162,13 @@ export default function build(args, callback) {
     config.plugins.push(new ProgressPlugin(function (percentage, msg, addInfo) {
       var stream = process.stderr;
 
-      if (stream.isTTY && percentage < 0.71) {
+      if (stream.isTTY && percentage < 0.7) {
         stream.cursorTo(0);
         stream.write("".concat(chalk.magenta(msg), " (").concat(chalk.magenta(addInfo), ")"));
         stream.clearLine(1);
-      } else if (percentage === 1) {}
+      } else if (percentage === 1) {
+        stream.cursorTo(0);
+      }
     }));
   });
 
@@ -225,9 +205,9 @@ export default function build(args, callback) {
 
       if (stats.hasErrors()) {
         console.error(buildInfo);
-      } else {
+      } else if (args.verbose) {
         console.log(buildInfo);
-      }
+      } else {}
     }
 
     if (callback) {
@@ -236,16 +216,6 @@ export default function build(args, callback) {
   }
 
   var compiler = webpack(webpackConfig);
-
-  if (!args.verbose) {
-    compiler.plugin('done', function (stats) {
-      stats.stats.forEach(function (stat) {
-        stat.compilation.children = stat.compilation.children.filter(function (child) {
-          return child.name !== 'extract-text-webpack-plugin';
-        });
-      });
-    });
-  }
 
   if (args.watch) {
     compiler.watch(args.watch || 200, doneHandler);

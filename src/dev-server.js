@@ -12,10 +12,10 @@ export default function devServer(compiler, args) {
   const app = express();
 
   const devMiddleware = webpackDevMiddleware(compiler, {
-    quiet: true,
+    logLevel: args.verbose ? 'info' : 'error',
   });
   const hotMiddleware = webpackHotMiddleware(compiler, {
-    log: () => {},
+    log: () => { },
   });
 
   devMiddleware.waitUntilValid(() => {
@@ -23,15 +23,15 @@ export default function devServer(compiler, args) {
   });
 
   app.use(connectHistoryApiFallback());
+  app.use(mockServer({
+    modules: [path.resolve(`${args.cwd}/api`), path.resolve(`${args.cwd}/src/api`)],
+  }));
   app.use(devMiddleware);
   app.use(hotMiddleware);
   app.use(express.static(path.resolve(`${args.cwd}/public`)));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
     extended: true,
-  }));
-  app.use(mockServer({
-    modules: [path.resolve(`${args.cwd}/api`), path.resolve(`${args.cwd}/src/api`)],
   }));
 
   app.listen(port, (err) => {

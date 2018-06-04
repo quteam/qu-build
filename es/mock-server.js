@@ -1,3 +1,6 @@
+import "core-js/modules/web.dom.iterable";
+import "core-js/modules/es6.array.iterator";
+import "core-js/modules/es6.object.keys";
 import "core-js/modules/es6.array.sort";
 import "core-js/modules/es6.regexp.split";
 import "core-js/modules/es6.array.index-of";
@@ -6,8 +9,8 @@ import "core-js/modules/es6.regexp.match";
 import "core-js/modules/es6.string.trim";
 import "core-js/modules/es6.array.map";
 import fs from 'fs';
+import { resolve } from 'path';
 import Mock, { Random } from 'mockjs';
-import walkdir from 'node-walkdir';
 var RE = /^\s*\/\*[*\s]+?([^\r\n]+)[\s\S]+?@url\s+([^\n]+)[\s\S]+?\*\//im;
 
 function mock(_opts) {
@@ -16,47 +19,55 @@ function mock(_opts) {
   _opts.modules.map(function (_dir) {
     fs.exists(_dir, function (exists) {
       if (exists) {
-        walkdir(_dir, /\.js(on)?$/i, function (filepath) {
-          var content = String(fs.readFileSync(filepath, 'utf8')).trim() || '{}';
-          var url = filepath;
-          var describe = 'no description';
-          var m = content.match(RE);
+        fs.readdir(_dir, function (err, files) {
+          files.map(function (file) {
+            if (/\.js(on)?$/i.test(file)) {
+              var filepath = resolve(_dir, file);
+              var content = String(fs.readFileSync(filepath, 'utf8')).trim() || '{}';
+              var url = filepath;
+              var describe = 'no description';
+              var m = content.match(RE);
 
-          if (m) {
-            url = m[2].trim();
-            describe = m[1].replace(/(^[\s*]+|[\s*]+$)/g, '');
-          }
+              if (m) {
+                url = m[2].trim();
+                describe = m[1].replace(/(^[\s*]+|[\s*]+$)/g, '');
+              }
 
-          if (url[0] !== '/') {
-            url = "/".concat(url);
-          }
+              if (url[0] !== '/') {
+                url = "/".concat(url);
+              }
 
-          var pathname = url;
+              var pathname = url;
 
-          if (pathname.indexOf('?') > -1) {
-            pathname = pathname.split('?')[0];
-          }
+              if (pathname.indexOf('?') > -1) {
+                pathname = pathname.split('?')[0];
+              }
 
-          if (mock.debug && routes[pathname]) {
-            console.warn("[Mock Warn]: [".concat(filepath, ": ").concat(pathname, "] already exists and has been covered with new data."));
-          }
+              if (mock.debug && routes[pathname]) {
+                console.warn("[Mock Warn]: [".concat(filepath, ": ").concat(pathname, "] already exists and has been covered with new data."));
+              }
 
-          routes[pathname] = {
-            url: url,
-            filepath: filepath,
-            describe: describe
-          };
+              routes[pathname] = {
+                url: url,
+                filepath: filepath,
+                describe: describe
+              };
 
-          if (/\.js$/.test(filepath)) {
-            routes[pathname].data = require(filepath);
-          } else {
-            try {
-              routes[pathname].data = new Function("return (".concat(content, ")"))();
-            } catch (e) {
-              delete routes[pathname];
-              mock.debug && console.warn('[Mock Warn]:', e);
+              if (/\.js$/.test(filepath)) {
+                routes[pathname].data = require(filepath);
+              } else {
+                try {
+                  routes[pathname].data = new Function("return (".concat(content, ")"))();
+                } catch (e) {
+                  delete routes[pathname];
+
+                  if (mock.debug) {
+                    console.warn('[Mock Warn]:', e);
+                  }
+                }
+              }
             }
-          }
+          });
         });
       }
     });
