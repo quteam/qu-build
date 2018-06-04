@@ -56,7 +56,9 @@ function mock(_opts) {
                   routes[pathname].data = new Function(`return (${content})`)();
                 } catch (e) {
                   delete routes[pathname];
-                  mock.debug && console.warn('[Mock Warn]:', e);
+                  if (mock.debug) {
+                    console.warn('[Mock Warn]:', e);
+                  }
                 }
               }
             }

@@ -1,4 +1,7 @@
 # Changelog List
+## 2.0.0-beta.4
+- 修复 Mock 服务器地址问题
+
 ## 2.0.0-beta.3
 - 更新图片优化
 
