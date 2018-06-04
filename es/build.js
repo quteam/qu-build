@@ -107,7 +107,7 @@ function getWebpackConfig() {
     }
 
     if (entryArr.length > 1) {
-      conf.chunks = ['common', pathname];
+      conf.chunks = ['vendor', 'common', pathname];
     }
 
     webpackConfig.plugins.push(new HtmlWebpackPlugin(conf));

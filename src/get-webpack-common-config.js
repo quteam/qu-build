@@ -89,7 +89,17 @@ export default function getWebpackCommonConfig(args) {
 
     optimization: {
       splitChunks: {
-        chunks: 'all',
+        chunks: 'initial',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            name: 'vendor',
+          },
+          common: {
+            name: 'common',
+          },
+        },
       },
     },
 
@@ -140,23 +150,6 @@ export default function getWebpackCommonConfig(args) {
           minetype: 'application/vnd.ms-fontobject',
         },
       },
-      // {
-      //   test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-      //   loader: 'url-loader',
-      //   options: {
-      //     name: 'img/[name]-[hash:5].[ext]',
-      //     limit: 8192,
-      //     minetype: 'image/svg+xml',
-      //   },
-      // },
-      // {
-      //   test: /\.(png|jpg|jpeg|gif)(\?v=\d+\.\d+\.\d+)?$/i,
-      //   loader: 'url-loader',
-      //   options: {
-      //     name: 'img/[name]-[hash:5].[ext]',
-      //     limit: 8192,
-      //   },
-      // },
       {
         test: /\.(gif|png|jpe?g|svg)$/i,
         use: [

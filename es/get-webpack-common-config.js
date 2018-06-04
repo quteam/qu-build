@@ -83,7 +83,17 @@ export default function getWebpackCommonConfig(args) {
     devtool: args.dev || args.sourcemap ? 'source-map' : false,
     optimization: {
       splitChunks: {
-        chunks: 'all'
+        chunks: 'initial',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            name: 'vendor'
+          },
+          common: {
+            name: 'common'
+          }
+        }
       }
     },
     resolve: {
