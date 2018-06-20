@@ -9,6 +9,7 @@ import {
 import webpack, { ProgressPlugin } from 'webpack';
 import rimraf from 'rimraf';
 import chalk from 'chalk';
+import readline from 'readline';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
@@ -51,15 +52,15 @@ function getWebpackConfig(args = {
   // Watch mode and Develop mode should not use UglifyJsPlugin
   if (!args.dev && !args.watch) {
     webpackConfig.plugins = [...webpackConfig.plugins,
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
-    }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+      }),
     ];
   } else {
     webpackConfig.plugins = [...webpackConfig.plugins,
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-    }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      }),
     ];
   }
 
@@ -153,8 +154,8 @@ export default function build(args, callback) {
           from: _publicPath,
           ignore: ['.*'],
         }], {
-            copyUnmodified: true,
-          }));
+          copyUnmodified: true,
+        }));
       }
 
       // PWA
@@ -175,11 +176,11 @@ export default function build(args, callback) {
     config.plugins.push(new ProgressPlugin((percentage, msg, addInfo) => {
       const stream = process.stderr;
       if (stream.isTTY && percentage < 0.7) {
-        stream.cursorTo(0);
+        readline.cursorTo(stream, 0);
         stream.write(`${chalk.magenta(msg)} (${chalk.magenta(addInfo)})`);
-        stream.clearLine(1);
+        readline.clearLine(stream, 1);
       } else if (percentage === 1) {
-        stream.cursorTo(0);
+        readline.cursorTo(stream, 0);
       }
     }));
   });

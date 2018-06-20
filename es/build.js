@@ -27,6 +27,7 @@ import { writeFileSync, existsSync } from 'fs';
 import webpack, { ProgressPlugin } from 'webpack';
 import rimraf from 'rimraf';
 import chalk from 'chalk';
+import readline from 'readline';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
@@ -163,11 +164,11 @@ export default function build(args, callback) {
       var stream = process.stderr;
 
       if (stream.isTTY && percentage < 0.7) {
-        stream.cursorTo(0);
+        readline.cursorTo(stream, 0);
         stream.write("".concat(chalk.magenta(msg), " (").concat(chalk.magenta(addInfo), ")"));
-        stream.clearLine(1);
+        readline.clearLine(stream, 1);
       } else if (percentage === 1) {
-        stream.cursorTo(0);
+        readline.cursorTo(stream, 0);
       }
     }));
   });
