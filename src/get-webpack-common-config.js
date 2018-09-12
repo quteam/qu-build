@@ -116,7 +116,7 @@ export default function getWebpackCommonConfig(args) {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
-          name: 'font/[name]-[hash:5].[ext]',
+          name: 'font/[name].[ext]',
           limit: 8192,
           minetype: 'application/font-woff',
         },
@@ -125,7 +125,7 @@ export default function getWebpackCommonConfig(args) {
         test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
-          name: 'font/[name]-[hash:5].[ext]',
+          name: 'font/[name].[ext]',
           limit: 8192,
           minetype: 'application/font-woff',
         },
@@ -134,7 +134,7 @@ export default function getWebpackCommonConfig(args) {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
-          name: 'font/[name]-[hash:5].[ext]',
+          name: 'font/[name].[ext]',
           limit: 8192,
           minetype: 'application/octet-stream',
         },
@@ -143,7 +143,7 @@ export default function getWebpackCommonConfig(args) {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
-          name: 'font/[name]-[hash:5].[ext]',
+          name: 'font/[name].[ext]',
           limit: 8192,
           minetype: 'application/vnd.ms-fontobject',
         },
@@ -154,7 +154,7 @@ export default function getWebpackCommonConfig(args) {
           {
             loader: 'url-loader',
             options: {
-              name: 'img/[name]-[hash:5].[ext]',
+              name: 'img/[name].[ext]',
               limit: 8192,
             },
           },

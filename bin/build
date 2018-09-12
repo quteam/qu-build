@@ -26,7 +26,7 @@ program
   .option('-t, --test', 'test this project, use jest')
   .option('-c, --component <component>', 'quickly create components')
   .option('--pwa', 'use pwa')
-  .option('--hash', 'build with hash and output map.json')
+  // .option('--hash', 'build with hash and output map.json')
   .option('--publicPath <publicPath>', 'publicPath for webpack')
   .option('--sourcemap', 'use sourcemap')
   .option('--config <path>', 'custom config path, default is webpack.config.js')
