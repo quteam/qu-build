@@ -1,6 +1,8 @@
 // import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { existsSync } from 'fs';
+import {
+  existsSync
+} from 'fs';
 import {
   join,
   resolve,
@@ -113,63 +115,62 @@ export default function getWebpackCommonConfig(args) {
     node,
     module: {
       rules: [{
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'font/[name].[ext]',
-          limit: 8192,
-          minetype: 'application/font-woff',
-        },
-      },
-      {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'font/[name].[ext]',
-          limit: 8192,
-          minetype: 'application/font-woff',
-        },
-      },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'font/[name].[ext]',
-          limit: 8192,
-          minetype: 'application/octet-stream',
-        },
-      },
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        options: {
-          name: 'font/[name].[ext]',
-          limit: 8192,
-          minetype: 'application/vnd.ms-fontobject',
-        },
-      },
-      {
-        test: /\.(gif|png|jpe?g|svg)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              name: 'img/[name].[ext]',
-              limit: 8192,
-            },
+          test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'font/[name].[ext]',
+            limit: 8192,
+            minetype: 'application/font-woff',
           },
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              bypassOnDebug: true,
-            },
+        },
+        {
+          test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'font/[name].[ext]',
+            limit: 8192,
+            minetype: 'application/font-woff',
           },
-        ],
-      },
-      {
-        test: /\.module\.(html|htm|txt|tpl)$/,
-        loader: 'raw-loader',
-      },
+        },
+        {
+          test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'font/[name].[ext]',
+            limit: 8192,
+            minetype: 'application/octet-stream',
+          },
+        },
+        {
+          test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url-loader',
+          options: {
+            name: 'font/[name].[ext]',
+            limit: 8192,
+            minetype: 'application/vnd.ms-fontobject',
+          },
+        },
+        {
+          test: /\.(gif|png|jpe?g|svg)$/i,
+          use: [{
+              loader: 'url-loader',
+              options: {
+                name: 'img/[name].[ext]',
+                limit: 8192,
+              },
+            },
+            {
+              loader: 'image-webpack-loader',
+              options: {
+                bypassOnDebug: true,
+              },
+            },
+          ],
+        },
+        {
+          test: /\.module\.(html|htm|txt|tpl)$/,
+          loader: 'raw-loader',
+        },
       ],
     },
 
