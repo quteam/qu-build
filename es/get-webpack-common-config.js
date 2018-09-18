@@ -84,7 +84,7 @@ export default function getWebpackCommonConfig(args) {
     devtool: args.dev || args.sourcemap ? 'source-map' : false,
     optimization: {
       splitChunks: {
-        chunks: 'all',
+        chunks: 'initial',
         name: 'common',
         cacheGroups: {
           vendor: {

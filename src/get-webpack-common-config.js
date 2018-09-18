@@ -92,7 +92,7 @@ export default function getWebpackCommonConfig(args) {
 
     optimization: {
       splitChunks: {
-        chunks: 'all',
+        chunks: 'initial',
         name: 'common',
         cacheGroups: {
           vendor: {
