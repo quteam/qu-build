@@ -1,11 +1,11 @@
 import {
-  tmpdir
+  tmpdir,
 } from 'os';
 import {
-  existsSync
+  existsSync,
 } from 'fs';
 import {
-  join
+  join,
 } from 'path';
 // import presetStage0 from '@babel/preset-stage-0';
 import presetEnv from '@babel/preset-env';
