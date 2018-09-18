@@ -86,6 +86,7 @@ export default function getWebpackCommonConfig(args) {
       path: pkg.outputPath ? join(args.cwd, `./${pkg.outputPath}/${pkg.name}/${pkg.version}`) : join(args.cwd, './dist/'),
       filename: jsFileName,
       chunkFilename: jsFileName,
+      publicPath: '../',
     },
     devtool: args.dev || args.sourcemap ? 'source-map' : false,
 
