@@ -92,15 +92,17 @@ export default function getWebpackCommonConfig(args) {
 
     optimization: {
       splitChunks: {
-        chunks: 'initial',
+        chunks: 'all',
         name: 'common',
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: -10,
-            name: 'vendor',
-          },
-        },
+        minChunks: 2,
+        maxInitialRequests: 2,
+        // cacheGroups: {
+        //   vendor: {
+        //     test: /[\\/]node_modules[\\/]/,
+        //     priority: -10,
+        //     name: 'vendor',
+        //   },
+        // },
       },
     },
 

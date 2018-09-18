@@ -1,6 +1,6 @@
 {
   "name": "qu-build",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Build tools for FE",
   "bin": {
     "qu-build": "./bin/build"
@@ -76,6 +76,7 @@
     "@babel/plugin-proposal-throw-expressions": "^7.0.0",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/plugin-transform-async-to-generator": "^7.1.0",
     "@babel/plugin-transform-runtime": "7.1.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",

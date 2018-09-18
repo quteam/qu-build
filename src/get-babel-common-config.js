@@ -13,6 +13,8 @@ import presetReact from '@babel/preset-react';
 import transformRuntime from '@babel/plugin-transform-runtime';
 import transformClasses from '@babel/plugin-proposal-class-properties';
 import proposalDecorators from '@babel/plugin-proposal-decorators';
+import dynamicImport from '@babel/plugin-syntax-dynamic-import';
+import asyncToGenerator from '@babel/plugin-transform-async-to-generator';
 
 export default function babel(args) {
   const pkgPath = join(args.cwd, 'package.json');
@@ -50,6 +52,8 @@ export default function babel(args) {
       [proposalDecorators, {
         legacy: true,
       }],
+      dynamicImport,
+      asyncToGenerator,
     ],
     comments: true,
   };
